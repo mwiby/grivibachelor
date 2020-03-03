@@ -43,7 +43,7 @@ h2 {
   font-size: 22px;
   margin-bottom: 10px;
 }
-
+/* container that creates whitespace on both sides */
 .sass-container {
   max-width: 80%;
   margin: auto;
@@ -68,6 +68,11 @@ h2 {
     background: $white;
   }
 }
+/* styles for nav, buttons and size of logo */
+.nav-logo {
+  width: 90px;
+  height: 90px;
+}
 
 .nav-button {
   color: $text-color !important;
@@ -77,15 +82,30 @@ h2 {
     text-decoration: underline solid black;
   }
 }
+/* end of nav style */
 
-.copyright{
-  font-size: 12px;;
+/* styles for footer */
+footer {
+  background: $gray-background;
+  color: $white;
+  a {
+    color: $white;
+  }
+  a:hover {
+    color: white;
+  }
 }
-.footer-btm{
+
+.copyright {
+  font-size: 12px;
+}
+.footer-btm {
   margin-bottom: 0px;
   padding-bottom: 0px;
 }
-img{
+/* end of footer style */
+
+img {
   width: 100%;
 }
 h1 {
@@ -100,17 +120,36 @@ p {
   margin-right: 14px;
 }
 
-footer {
-  background: $gray-background;
-  color: $white;
-  a {
-    color: $white;
-      }
-  a:hover{
-    color: white;
-  }
-    }
-    .nav-logo{
-      width: 90px;
-      height: 90px;
-    }
+/* style of cards for clothes in the store */
+.card {
+  border: none;
+  border-radius: 0em;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.card-body {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+.card-brand {
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-size: 15px;
+  color: grey;
+}
+.card-name {
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-weight: bold;
+  font-size: 15px;
+}
+.card-price {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+#card-click {
+  text-decoration: none;
+  color: black;
+}
+/* end of styles for cards */

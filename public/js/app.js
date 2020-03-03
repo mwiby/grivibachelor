@@ -1914,70 +1914,86 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       // Bare test data for å prøve litt, siden jeg ikke har noe api.
       womanProducts: [{
         id: 1,
-        name: 'Woman123',
-        brand: 'Vans',
+        name: "Woman123",
+        brand: "Vans",
         price: 499
       }, {
         id: 2,
-        name: 'Leather-jacket',
-        brand: 'Lacoste',
+        name: "Leather-jacket",
+        brand: "Lacoste",
         price: 899
       }, {
         id: 3,
-        name: 'Cocacola genser',
-        brand: 'Ella',
+        name: "Cocacola genser",
+        brand: "Ella",
         price: 199
       }, {
         id: 4,
-        name: 'Pepsi genser',
-        brand: 'Dammm',
+        name: "Pepsi genser",
+        brand: "Dammm",
         price: 449
       }, {
         id: 5,
-        name: 'Grey jacket',
-        brand: 'Ssd',
+        name: "Grey jacket",
+        brand: "Ssd",
         price: 499
       }],
       manProducts: [{
         id: 1,
-        name: 'Pokemon genser',
-        brand: 'xcovk',
+        name: "Pokemon genser",
+        brand: "xcovk",
         price: 499
       }, {
         id: 2,
-        name: 'Bukse cocacola',
-        brand: 'kpofds',
+        name: "Bukse cocacola",
+        brand: "kpofds",
         price: 899
       }, {
         id: 3,
-        name: 'Vø trening',
-        brand: 'asd',
+        name: "Vø trening",
+        brand: "asd",
         price: 199
       }, {
         id: 4,
-        name: 'Dc shoes',
-        brand: 'såpfl',
+        name: "Dc shoes",
+        brand: "såpfl",
         price: 449
       }, {
         id: 5,
-        name: 'Alloha',
-        brand: 'Ssd',
+        name: "Alloha",
+        brand: "Ssd",
         price: 499
       }],
       products: [],
-      pathname: ''
+      pathname: ""
     };
   },
   created: function created() {
     this.getPathname();
 
-    if (this.pathname == '/herre') {
+    if (this.pathname == "/herre") {
       this.getMenClothes();
     } else {
       this.getWomanClothes();
@@ -37671,7 +37687,46 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("p", [_vm._v(_vm._s(_vm.products))])])
+  return _c("div", [
+    _c("div", { staticClass: "container" }, [
+      _c(
+        "div",
+        { staticClass: "row" },
+        _vm._l(_vm.products, function(product) {
+          return _c(
+            "div",
+            {
+              key: product.id,
+              staticClass: "card col-lg-3 col-md-4 col-sm-6 col-xs-12"
+            },
+            [
+              _c("a", { attrs: { href: "#", id: "card-click" } }, [
+                _c("img", {
+                  staticClass: "card-img-top",
+                  attrs: { src: "img/men_hoodie.jpg", alt: "..." }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body" }, [
+                  _c("p", { staticClass: "card-brand" }, [
+                    _vm._v(_vm._s(product.brand))
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-name" }, [
+                    _vm._v(_vm._s(product.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-price" }, [
+                    _vm._v(_vm._s(product.price) + ",-")
+                  ])
+                ])
+              ])
+            ]
+          )
+        }),
+        0
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
