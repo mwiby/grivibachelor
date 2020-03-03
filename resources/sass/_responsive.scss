@@ -1,0 +1,35 @@
+
+@media only screen and (max-width: 1200px) {
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width: 992px) {
+  }
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+  .nav-link{
+    font-size: 15px;
+  }
+  .nav-logo{
+    width:170px;
+    height: 170px;
+  }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width: 480px) {
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width: 320px) {
+}
+
+/* centers the logo in the nav on smaller screens*/
+@media (max-width: 620px) {
+  .set-mid{
+    margin-right: auto;
+    margin-left: auto;
+  }
+}

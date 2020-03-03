@@ -1,0 +1,116 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: $text-color;
+
+  &:visited {
+    color: $text-color;
+  }
+}
+
+ul {
+  list-style-type: none;
+}
+
+h1,
+h2 {
+  font-family: "Montserrat", Arial, sans-serif;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 38px;
+  margin-bottom: 40px;
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.sass-container {
+  max-width: 80%;
+  margin: auto;
+}
+
+.button {
+  border: 1px solid $text-color;
+  padding: 12px 40px;
+
+  &:hover {
+    color: $white;
+    background: $text-color;
+  }
+}
+
+.button-white {
+  border: 1px solid $white;
+  color: $text-color !important;
+
+  &:hover {
+    color: $text-color !important;
+    background: $white;
+  }
+}
+
+.nav-button {
+  color: $text-color !important;
+
+  &:hover {
+    color: $text-color !important;
+    text-decoration: underline solid black;
+  }
+}
+
+.copyright{
+  font-size: 12px;;
+}
+.footer-btm{
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+img{
+  width: 100%;
+}
+h1 {
+  font-size: 52px;
+  margin-top: 50px;
+}
+
+p {
+  margin: 40px 0 68px;
+}
+.button {
+  margin-right: 14px;
+}
+
+footer {
+  background: $gray-background;
+  color: $white;
+  a {
+    color: $white;
+      }
+  a:hover{
+    color: white;
+  }
+    }
+    .nav-logo{
+      width: 90px;
+      height: 90px;
+    }
