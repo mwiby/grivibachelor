@@ -1930,6 +1930,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1957,7 +1958,7 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         id: 5,
         name: "Grey jacket",
-        brand: "Ssd",
+        brand: "Lacoste",
         price: 499
       }],
       manProducts: [{
@@ -1994,22 +1995,28 @@ __webpack_require__.r(__webpack_exports__);
     this.getPathname();
 
     if (this.pathname == "/herre") {
-      this.getMenClothes();
+      this.getMenClothes(); // Hent ut de nyeste klæra for herre : get.(api/products/herre), vet ikke hvordan syntaxen er for å lage api linker
     } else {
-      this.getWomanClothes();
+      this.getWomanClothes(); // Hent ut de nyeste klæra for herre : get.(api/products/dame)
     }
   },
   methods: {
     getPathname: function getPathname() {
+      // Sjekker om det er dame eller herre
       var pathname = window.location.pathname;
       this.pathname = pathname;
     },
+    // Disse er bare for test
     getMenClothes: function getMenClothes() {
       this.products = this.manProducts;
     },
     getWomanClothes: function getWomanClothes() {
       this.products = this.womanProducts;
-    }
+    } // Når det kommer metoder for klesfilteret etterhvert:
+    // Api for kategori. Må få alle klær av type kategori. Feks alle gensere for herrer.
+    // Api for brands. Må få retunert alle brands av en type kategori. Utifra hva slags brands som er selected i filteret.
+    // Feks hvis en herre har valgt diesel og replay på genser kategorien. Så må jeg få retunert alle disel og replay gensere for herre.
+
   }
 });
 
@@ -53267,8 +53274,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\grivibachelor\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\grivibachelor\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! c:\xampp\htdocs\grivibachelor\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! c:\xampp\htdocs\grivibachelor\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
