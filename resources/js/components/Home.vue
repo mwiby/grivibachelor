@@ -32,36 +32,36 @@
                 <!-- Her må vi ha api for merker -->
                 <div class="row text-center">
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="https://www.frislid.no/" target="blank"><img src="" alt="product" width="230" height="140"></a>
-                        <a href="#"><div class="product-name">Frislid</div></a>
+                        <a href="https://www.frislid.no/" target="blank"><img src="storage/frislid.png" alt="product" width="230" height="140"></a>
+                        <a href="#"><div class="product-name">Frislid</div> </a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product" width="230" height="140"></a>
+                        <a href="#"><img src="storage/diesel.png" alt="product" width="230" height="140"></a>
                         <a href="#"><div class="product-name">Diesel</div></a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product" width="230" height="140"></a>
+                        <a href="#"><img src="storage/nn07.jpg" alt="product" width="230" height="140"></a>
                         <a href="#"><div class="product-name">NN07</div></a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product" width="230" height="140"></a>
+                        <a href="#"><img src="storage/replay.png" alt="product" width="230" height="140"></a>
                         <a href="#"><div class="product-name">Replay</div></a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product" width="230" height="140"></a>
+                        <a href="#"><img src="storage/ella.png" alt="product" width="230" height="140"></a>
                         <a href="#"><div class="product-name">Ella&il</div></a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product" width="230" height="140"></a>
+                        <a href="#"><img src="storage/borg.png" alt="product" width="230" height="140"></a>
                         <a href="#"><div class="product-name">Bjørn Borg</div></a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product"></a>
-                        <a href="#"><div class="product-name">Frislid</div></a>
+                        <a href="#"><img src="storage/lineofoslo.png" alt="product" width="230" height="140"></a>
+                        <a href="#"><div class="product-name">Line of Oslo</div></a>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <a href="#"><img src="" alt="product"></a>
-                        <a href="#"><div class="product-name">Frislid</div></a>
+                        <a href="#"><img src="storage/arniesays.png" alt="product" width="230" height="140"></a>
+                        <a href="#"><div class="product-name">Arnie says</div></a>
                     </div>
                     <div class="col-12 text-center my-5">
                     <a href="#" class="button">Vis flere merker</a>
@@ -69,7 +69,8 @@
                 </div> <!-- end products -->
             </div>  <!-- end container -->
 
-            <div class="container my-5">
+            <div class="instaBackground pb-5 pt-3">
+            <div class="container ">
                 <h1 class="text-center">Følg oss på Instagram</h1>
 
                 <p class="section-description text-center my-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et sed accusantium maxime dolore cum provident itaque ea, a architecto alias quod reiciendis ex ullam id, soluta deleniti eaque neque perferendis.</p>
@@ -91,5 +92,6 @@
                     </div>
                 </div> <!-- end blog-posts -->
             </div> <!-- end container -->
+            </div>
     </body>
 </template>
