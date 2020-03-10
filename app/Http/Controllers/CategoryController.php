@@ -9,21 +9,24 @@ class CategoryController extends Controller
 {
     public function index(){
         
-        $categories = Category::get();
+        $categories = Category::all();
         
         return $categories;
     
     }
-    public function show(){
+    public function show($slug){
 
-        $products;
+        $products = Category::where('slug',$slug)->firstOrFail()->products;
         
-        if(request('category')){
-            $products = Category::where('name',request('category'))->firstOrFail()->products;
+
+        if($products->isEmpty()){
+            $products = 'Ingen produkter i denne Kategorien';
+            return $products;
         }
         else {
-            $products = 'Ingen produkter i denne Kategorien';
+
+            ddd($products);
+            return $products;
         }
-        return $products;
     }
 }
