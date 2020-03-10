@@ -235,30 +235,90 @@ class DataSeeder extends Seeder
             'name' => 'Bukse v3',
             'slug' => 'bukse-v3',
             'details' => 'God kvalitet',
-            'price' => 559,
+            'price' => 456,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
             'image' => 'bukse3.png',
             'gender' => 0,
             'brand_id' => 2,
         ]);
         Product::create([
-            'name' => 'Treningsbukse v4',
-            'slug' => 'bukse-v4',
+            'name' => 'Treningsbukse v1',
+            'slug' => 'treningsbukse-v1',
             'details' => 'God kvalitet',
             'price' => 239,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
-            'image' => 'bukse4.png',
+            'image' => 'treningsbukse1.png',
             'gender' => 0,
             'brand_id' => 2,
         ]);
         Product::create([
-            'name' => 'Treningsbukse v5',
-            'slug' => 'bukse-v5',
+            'name' => 'Treningsbukse v2',
+            'slug' => 'treningsbukse-v2',
             'details' => 'God kvalitet',
             'price' => 529,
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
+            'image' => 'treningsbukse2.png',
+            'gender' => 1,
+            'brand_id' => 2,
+        ]);
+        Product::create([
+            'name' => 'Bukse v4',
+            'slug' => 'bukse-v4',
+            'details' => 'God kvalitet',
+            'price' => 559,
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
+            'image' => 'bukse4.png',
+            'gender' => 1,
+            'brand_id' => 2,
+        ]);
+        Product::create([
+            'name' => 'Bukse v5',
+            'slug' => 'bukse-v5',
+            'details' => 'God kvalitet',
+            'price' => 1499,
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
             'image' => 'bukse5.png',
-            'gender' => 0,
+            'gender' => 1,
+            'brand_id' => 2,
+        ]);
+        Product::create([
+            'name' => 'Bukse v6',
+            'slug' => 'bukse-v6',
+            'details' => 'God kvalitet',
+            'price' => 550,
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
+            'image' => 'bukse6.png',
+            'gender' => 1,
+            'brand_id' => 2,
+        ]);
+        Product::create([
+            'name' => 'Bukse v7',
+            'slug' => 'bukse-v7',
+            'details' => 'God kvalitet',
+            'price' => 899,
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
+            'image' => 'bukse7.png',
+            'gender' => 1,
+            'brand_id' => 2,
+        ]);
+        Product::create([
+            'name' => 'Treningsbukse v3',
+            'slug' => 'treningsbukse v3',
+            'details' => 'God kvalitet',
+            'price' => 549,
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
+            'image' => 'bukse8.png',
+            'gender' => 1,
+            'brand_id' => 2,
+        ]);
+        Product::create([
+            'name' => 'TreningsBukse v4',
+            'slug' => 'treningsbukse v4',
+            'details' => 'God kvalitet',
+            'price' => 1359,
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptatem ullam officiis possimus modi necessitatibus cumque fugit blanditiis quia! Sapiente qui blanditiis nihil culpa perspiciatis nam delectus obcaecati nesciunt aut!',
+            'image' => 'bukse9.png',
+            'gender' => 1,
             'brand_id' => 2,
         ]);
         
@@ -365,6 +425,38 @@ class DataSeeder extends Seeder
         ]);
         CategoryProduct::create([
             'product_id' => 17,
+            'category_id' => 5,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 18,
+            'category_id' => 1,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 19,
+            'category_id' => 1,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 20,
+            'category_id' => 1,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 21,
+            'category_id' => 1,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 22,
+            'category_id' => 1,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 23,
+            'category_id' => 1,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 22,
+            'category_id' => 5,
+        ]);
+        CategoryProduct::create([
+            'product_id' => 23,
             'category_id' => 5,
         ]);
 
