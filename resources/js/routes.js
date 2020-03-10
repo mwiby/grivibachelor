@@ -5,7 +5,6 @@ import Products from './components/Products'
 import SingleProduct from './components/SingleProduct'
 
 export default {
-    mode: 'history',
 
     linkActiveClass: 'font-bold',
 
@@ -26,24 +25,35 @@ export default {
             component: Contact
         },
 
-        //Mann og dame routes
+        // Herre routes
         {
             path: '/herre',
             component: Products
         },
 
         {
-            path: '/herre/:id',
+            path: '/herre/:catId',
+            component: Products
+        },
+
+        {
+            path: '/produkt/:id',
             component: SingleProduct
         },
 
+        // Dame routes
         {
             path: '/dame',
             component: Products
         },
 
         {
-            path: '/dame/:id',
+            path: '/dame/:catId',
+            component: Products
+        },
+
+        {
+            path: '/produkt/:id',
             component: SingleProduct
         },
     ]
