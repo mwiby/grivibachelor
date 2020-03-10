@@ -94,6 +94,9 @@ footer {
   a:hover {
     color: white;
   }
+  a:visited {
+    color: $white;
+  }
 }
 
 .copyright {
@@ -120,7 +123,16 @@ p {
   margin-right: 14px;
 }
 
+/* Instapage */
+.instaBackground {
+  background-color: $light-gray-background;
+}
+
 /* style of cards for clothes in the store */
+#card-row {
+  margin-left: 0em;
+  margin-right: 0em;
+}
 .card {
   border: none;
   border-radius: 0em;
@@ -130,6 +142,8 @@ p {
 .card-body {
   margin-top: 0em;
   margin-bottom: 0em;
+  margin-right: 0em;
+  margin-left: 0em;
 }
 .card-brand {
   margin-top: 0em;
@@ -153,3 +167,16 @@ p {
   color: black;
 }
 /* end of styles for cards */
+
+/* style for filtering clothes */
+#filter {
+  background-color: $light-gray-background;
+}
+.list-group-item {
+  border: none;
+  outline: none;
+}
+a.btn-white {
+  color: black;
+}
+/* end of style for filtering clothes */
