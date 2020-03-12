@@ -22,6 +22,9 @@
 
 /* Custom, iPhone Retina */
 @media only screen and (max-width: 320px) {
+  .sp-description{
+    padding-right: none;
+  }
 }
 
 /* centers the logo in the nav on smaller screens*/
