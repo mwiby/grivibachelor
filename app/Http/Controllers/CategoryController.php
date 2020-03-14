@@ -12,7 +12,7 @@ class CategoryController extends Controller
         
         $categories = Category::all();
         
-        return $categories;
+        return view('welcome', ['categories' => $categories]);
     
     }
     public function show($gender,$c_slug){
@@ -20,6 +20,8 @@ class CategoryController extends Controller
         $products = Product::whereHas('categories',function($query) use ($c_slug){
             $query->where('slug',$c_slug);
         })->where('gender', $gender)->get();
+        
         return view('welcome', ['products' => $products]);
+
     }
 }
