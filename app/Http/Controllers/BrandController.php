@@ -29,7 +29,7 @@ class BrandController extends Controller
             return $products;
         }
         else {
-            return $products;
+            return view('welcome',['products' => $products];
         }
         
     }
