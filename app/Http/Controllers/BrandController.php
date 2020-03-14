@@ -10,8 +10,12 @@ class BrandController extends Controller
     public function index(){
         
         $brands = Brand::all();
-        
-        return $brands;
+        if($brands){
+            return view('welcome', ['brands' => $brands]);
+        }
+        else{
+            return view('welcome', ['brands' => 'Ingen brands tilgjengelig']);
+        }
     
     }
   

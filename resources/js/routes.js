@@ -6,6 +6,7 @@ import SingleProduct from './components/SingleProduct'
 
 export default {
 
+    mode: 'history',
     linkActiveClass: 'font-bold',
 
     

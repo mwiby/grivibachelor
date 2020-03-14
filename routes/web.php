@@ -7,22 +7,20 @@ Route::get('/', function () {
 });
  
 
-// Returnerer 9 produkter for hver gender (ligger bare 4 herre produkter inne)
-Route::get('/products/men', 'ProductController@index');
-Route::get('/products/woman', 'ProductController@index');
+//Returnerer alle brands
+Route::get('/clothes/brands', 'BrandController@index');
+//Returnerer ett bestemt brand sine produkter
+Route::get('/clothes/brands/{slug}', 'BrandController@show');
+
+/*
+ - Første route kall når man trykker mann eller dame
+ - Returnerer 6 produkter og kategorier for kjønnet
+*/
+Route::get('/clothes/{gender}', 'ClothesController@index');
+
+// Returnerer produktene til kategori
+Route::get('/clothes/{gender}/category/{c_slug}', 'CategoryController@show');
 
 // Returnerer produktet til slug
-Route::get('/products/{slug}', 'ProductController@show');
+Route::get('/product/{slug}', 'ProductController@show');
 
-// Returnerer alle produktene til valgt kategori
-Route::get('/categories/men/{slug}', 'CategoryController@show');
-Route::get('/categories/woman/{slug}', 'CategoryController@show');
-
-// Returnerer alle kategorier
-Route::get('/categories', 'CategoryController@index');
-
-//Returnerer alle Brands
-Route::get('/brands', 'BrandController@index');
-
-//Returnerer produktene til Brand slug
-Route::get('/brands/{slug}', 'BrandController@show');

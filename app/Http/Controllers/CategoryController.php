@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
 use App\Category;
 use Illuminate\Http\Request;
 
@@ -14,19 +15,11 @@ class CategoryController extends Controller
         return $categories;
     
     }
-    public function show($slug){
-
-        $products = Category::where('slug',$slug)->firstOrFail()->products;
+    public function show($gender,$c_slug){
         
-
-        if($products->isEmpty()){
-            $products = 'Ingen produkter i denne Kategorien';
-            return $products;
-        }
-        else {
-
-            ddd($products);
-            return $products;
-        }
+        $products = Product::whereHas('categories',function($query) use ($c_slug){
+            $query->where('slug',$c_slug);
+        })->where('gender', $gender)->get();
+        return view('welcome', ['products' => $products]);
     }
 }
