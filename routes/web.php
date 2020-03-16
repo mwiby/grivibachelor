@@ -24,3 +24,8 @@ Route::get('/clothes/{gender}/category/{c_slug}', 'CategoryController@show');
 // Returnerer produktet til slug
 Route::get('/product/{slug}', 'ProductController@show');
 
+
+// admin siden
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

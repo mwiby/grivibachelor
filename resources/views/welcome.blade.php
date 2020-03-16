@@ -45,7 +45,7 @@
             <!-- End top-nav -->
 
             <router-view :key="$route.path"></router-view>
-
+            
             <!-- Footer -->
             <footer>
                 <!-- Column for contact information -->
