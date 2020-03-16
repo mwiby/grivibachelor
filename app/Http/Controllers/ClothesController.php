@@ -20,7 +20,7 @@ class ClothesController extends Controller {
 
             $products = Product::where('gender',0)->limit(6)->get();
   
-            return view('welcome')->with(['products' => $products,'categories' => $categories]);
+            return ['products' => $products,'categories' => $categories];
         }
      else
         if($gender === 'man' ){
@@ -30,7 +30,7 @@ class ClothesController extends Controller {
             })->get();
 
             $products = Product::where('gender',1)->limit(6)->get();
-            return view('welcome')->with(['products' => $products,'categories' => $categories]);
+            return ['products' => $products,'categories' => $categories];
         }
         else{
             abort(404);

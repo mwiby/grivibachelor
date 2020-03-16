@@ -25,7 +25,7 @@
           <div class="collapse" id="collapseCategory">
             <ul v-for="category in categories" v-bind:key="category.id" class="text-left">
               <li>
-                <router-link v-bind:to="gender + '/' + category.name">{{category.name}}</router-link>
+                <router-link v-bind:to="gender + '/' + category.slug">{{category.name}}</router-link>
               </li>
             </ul>
           </div>
@@ -43,12 +43,13 @@
             <h2>Merke</h2>
           </a>
           <ul
+            v-for="brand in brands" v-bind:key="brand.id"
             class="collapse text-left"
             id="collapseBrands"
           >
             <li>
-              <input type="checkbox" v-model="userSelectedBrands"/>
-                Diesel
+              <input type="checkbox" v-bind:value="brand.slug" v-model="userSelectedBrands"/>
+                {{brand.name}}
             </li>
           </ul>
           <a
@@ -76,10 +77,10 @@
           v-for="product in products"
           v-bind:key="product.id"
         >
-          <router-link v-bind:to="'/produkt/' + product.id" id="card-click">
+          <router-link v-bind:to="'/produkt/' + product.slug" id="card-click">
             <img src="img/men_hoodie.jpg" class="card-img-top" alt="..." />
             <div class="card-body">
-              <p class="card-brand">{{product.brand}}</p>
+              <p class="card-brand">sdfdsfdsfs</p>
               <p class="card-name">{{product.name}}</p>
               <p class="card-price">{{product.price}},-</p>
             </div>
@@ -97,6 +98,9 @@ export default {
       // Produkter som vises
       products: [],
 
+      // Produkter som blir hentet utifra brands
+      brandProducts: [],
+
       // Pather som blir lagret for api call og routes
       apiPathname: "",
       pathname: "",
@@ -104,40 +108,58 @@ export default {
 
       // Ting som kan bli filtrert på
       categories: [],
+      brands: [],
 
       // Brukervalgte ting
       userSelectedBrands: [],
 
       // Route params
       catId: this.$route.params.catId,
+
+      // Boolean for å se om vi har fått fetchet
+      // doneFetching: false
     };
   },
   created() {
-    
     this.getPathname(); // Henter pathname
     this.getProducts(); // Henter produkter
-    this.getCategories(); // Henter kategorier
-
-    
+    //this.getCategories(); // Henter kategorier
+    //this.getBrands(); // Henter merker
+    console.log("created");
   },
 
-  beforeUpdate() {
+  /* Watcher om bruker har selektert noen brands */
+  watch: {
+    userSelectedBrands: function() {
+      if(this.userSelectedBrands.length == 0) {
+        this.getProducts();
+        console.log("this.getProducts()")
+      } 
+      else {
+        this.getProductsBrand();
+        console.log("userSelectedBrands function");
+      }
+    },
+    brandProducts: function() {
+      this.products = this.brandProducts;
+      console.log("brandProducts function");
+    }
   },
 
   methods: {
     getPathname() { // Sjekker om det er dame eller herre
       var pathname = window.location.href;
       if(pathname.includes("herre") == true) {
-        this.apiPathname = 'Men';
+        this.apiPathname = 'man';
         this.gender = "herre";
       }
       else if(pathname.includes("dame")) {
-        this.apiPathname = 'Woman';
+        this.apiPathname = 'woman';
         this.gender = "dame";
       }
     },
 
-    // Bestemmer hvilke produkter som vises
+    // Bestemmer hvilke produkter som vises: Enten kategory produkter eller ikke
     getProducts() {
         if(this.catId == null) {
           this.getNewProducts();
@@ -149,15 +171,16 @@ export default {
 
     // Får 9 nyeste produkter fra enten mann eller dame
     getNewProducts() {
-      axios({method: 'GET', url: 'products/' + this.apiPathname}).then(
+      axios({method: 'GET', url: 'clothes/' + this.apiPathname}).then(
         result => {
           this.products = result.data;
+          console.log(result.data);
         });
     },
 
     // Får alle produktene av en spesifisert kategory
     getProductsCategory() {
-      axios({method: 'GET', url: 'categories/' + this.catId}).then(
+      axios({method: 'GET', url: 'categories/man/' + this.catId}).then(
         result => {
           this.products = result.data;
         });
@@ -170,6 +193,28 @@ export default {
           this.categories = result.data;
         });
     },
+
+    // Får alle merker
+    getBrands() {
+      axios({method: 'GET', url: 'clothes/brands'}).then(
+        result => {
+          this.brands = result.data;
+        });
+    },
+
+    // Får alle merker som er selektert
+    getProductsBrand() {
+      var testBrand = this.userSelectedBrands[0];
+      if(this.userSelectedBrands.length > 0) {
+        axios({method: 'GET', url: 'brands/' + testBrand}).then(
+          result => {
+            this.brandProducts = result.data;
+            // Fra lav til høy this.brandProducts.sort((a, b) => (a.price > b.price) ? 1 : -1);
+            // Fra høy til lav this.brandProducts.sort((a, b) => (a.price < b.price) ? 1 : -1);
+          });
+      }
+    },
+
 
   }
 };
