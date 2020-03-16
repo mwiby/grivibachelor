@@ -48,6 +48,7 @@ export default {
   created() {
     this.getProduct();
   },
+  // Henter produktet
   methods: {
     getProduct() {
       axios.get("product/" + this.id).then(
