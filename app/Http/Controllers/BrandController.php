@@ -11,10 +11,10 @@ class BrandController extends Controller
         
         $brands = Brand::all();
         if($brands){
-            return view('welcome')->with(['brands' => $brands]);
+            return ['brands' => $brands];
         }
         else{
-            return view('welcome')->with(['brands' => 'Ingen brands tilgjengelig']);
+            return ['brands' => 'Ingen brands tilgjengelig'];
         }
     
     }
@@ -29,7 +29,7 @@ class BrandController extends Controller
             return $products;
         }
         else {
-            return view('welcome')->with(['products' => $products]);
+            return ['products' => $products];
         }
         
     }

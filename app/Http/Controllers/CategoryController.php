@@ -12,7 +12,7 @@ class CategoryController extends Controller
         
         $categories = Category::all();
         
-        return view('welcome')->with(['categories' => $categories]);
+        return ['categories' => $categories];
     
     }
     public function show($gender,$c_slug){
@@ -21,7 +21,7 @@ class CategoryController extends Controller
             $query->where('slug',$c_slug);
         })->where('gender', $gender)->get();
         
-        return view('welcome')->with(['products' => $products]);
+        return ['products' => $products];
 
     }
 }
