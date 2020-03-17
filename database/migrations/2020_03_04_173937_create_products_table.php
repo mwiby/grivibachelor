@@ -20,7 +20,6 @@ class CreateProductsTable extends Migration
             $table->string('details')->nullable();
             $table->integer('price');
             $table->text('description');
-            $table->text('image');
             $table->boolean('gender');
             $table->unsignedinteger('brand_id');
 
