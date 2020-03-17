@@ -2000,45 +2000,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       // Produkter som vises
       products: [],
+      // Produkter som blir hentet utifra brands
+      brandProducts: [],
       // Pather som blir lagret for api call og routes
       apiPathname: "",
       pathname: "",
       gender: "",
       // Ting som kan bli filtrert på
       categories: [],
+      brands: [],
       // Brukervalgte ting
       userSelectedBrands: [],
       // Route params
-      catId: this.$route.params.catId
+      catId: this.$route.params.catId // Boolean for å se om vi har fått fetchet
+      // doneFetching: false
+
     };
   },
   created: function created() {
     this.getPathname(); // Henter pathname
 
     this.getProducts(); // Henter produkter
+    //this.getCategories(); // Henter kategorier
+    //this.getBrands(); // Henter merker
 
-    this.getCategories(); // Henter kategorier
+    console.log("created");
   },
-  beforeUpdate: function beforeUpdate() {},
+
+  /* Watcher om bruker har selektert noen brands */
+  watch: {
+    userSelectedBrands: function userSelectedBrands() {
+      if (this.userSelectedBrands.length == 0) {
+        this.getProducts();
+        console.log("this.getProducts()");
+      } else {
+        this.getProductsBrand();
+        console.log("userSelectedBrands function");
+      }
+    },
+    brandProducts: function brandProducts() {
+      this.products = this.brandProducts;
+      console.log("brandProducts function");
+    }
+  },
   methods: {
     getPathname: function getPathname() {
       // Sjekker om det er dame eller herre
       var pathname = window.location.href;
 
       if (pathname.includes("herre") == true) {
-        this.apiPathname = 'Men';
+        this.apiPathname = 'man';
         this.gender = "herre";
       } else if (pathname.includes("dame")) {
-        this.apiPathname = 'Woman';
+        this.apiPathname = 'woman';
         this.gender = "dame";
       }
     },
-    // Bestemmer hvilke produkter som vises
+    // Bestemmer hvilke produkter som vises: Enten kategory produkter eller ikke
     getProducts: function getProducts() {
       if (this.catId == null) {
         this.getNewProducts();
@@ -2052,9 +2076,10 @@ __webpack_require__.r(__webpack_exports__);
 
       axios({
         method: 'GET',
-        url: 'products/' + this.apiPathname
+        url: 'clothes/' + this.apiPathname
       }).then(function (result) {
         _this.products = result.data;
+        console.log(result.data);
       });
     },
     // Får alle produktene av en spesifisert kategory
@@ -2063,7 +2088,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios({
         method: 'GET',
-        url: 'categories/' + this.catId
+        url: 'categories/man/' + this.catId
       }).then(function (result) {
         _this2.products = result.data;
       });
@@ -2078,6 +2103,33 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         _this3.categories = result.data;
       });
+    },
+    // Får alle merker
+    getBrands: function getBrands() {
+      var _this4 = this;
+
+      axios({
+        method: 'GET',
+        url: 'clothes/brands'
+      }).then(function (result) {
+        _this4.brands = result.data;
+      });
+    },
+    // Får alle merker som er selektert
+    getProductsBrand: function getProductsBrand() {
+      var _this5 = this;
+
+      var testBrand = this.userSelectedBrands[0];
+
+      if (this.userSelectedBrands.length > 0) {
+        axios({
+          method: 'GET',
+          url: 'brands/' + testBrand
+        }).then(function (result) {
+          _this5.brandProducts = result.data; // Fra lav til høy this.brandProducts.sort((a, b) => (a.price > b.price) ? 1 : -1);
+          // Fra høy til lav this.brandProducts.sort((a, b) => (a.price < b.price) ? 1 : -1);
+        });
+      }
     }
   }
 });
@@ -2111,6 +2163,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2125,7 +2198,7 @@ __webpack_require__.r(__webpack_exports__);
     getProduct: function getProduct() {
       var _this = this;
 
-      axios.get('products/' + this.id).then(function (response) {
+      axios.get("products/" + this.id).then(function (response) {
         var data = response.data;
         _this.product = data;
       }, function (error) {
@@ -37864,104 +37937,114 @@ var render = function() {
         "div",
         { staticClass: "col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center" },
         [
-          _c("div", [
-            _vm._m(0),
-            _vm._v(" "),
-            _vm.catId == null
-              ? _c("div", [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "collapse",
-                      attrs: { id: "collapseCategory" }
-                    },
-                    _vm._l(_vm.categories, function(category) {
-                      return _c(
-                        "ul",
-                        { key: category.id, staticClass: "text-left" },
-                        [
-                          _c(
-                            "li",
-                            [
-                              _c(
-                                "router-link",
-                                {
-                                  attrs: {
-                                    to: _vm.gender + "/" + category.name
-                                  }
-                                },
-                                [_vm._v(_vm._s(category.name))]
-                              )
-                            ],
-                            1
-                          )
-                        ]
-                      )
-                    }),
-                    0
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._m(2),
-            _vm._v(" "),
-            _c(
-              "ul",
-              {
-                staticClass: "collapse text-left",
-                attrs: { id: "collapseBrands" }
-              },
-              [
-                _c("li", [
-                  _c("input", {
-                    directives: [
+          _c(
+            "div",
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _vm.catId == null
+                ? _c("div", [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c(
+                      "div",
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.userSelectedBrands,
-                        expression: "userSelectedBrands"
-                      }
-                    ],
-                    attrs: { type: "checkbox" },
-                    domProps: {
-                      checked: Array.isArray(_vm.userSelectedBrands)
-                        ? _vm._i(_vm.userSelectedBrands, null) > -1
-                        : _vm.userSelectedBrands
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$a = _vm.userSelectedBrands,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 &&
-                              (_vm.userSelectedBrands = $$a.concat([$$v]))
-                          } else {
-                            $$i > -1 &&
-                              (_vm.userSelectedBrands = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
+                        staticClass: "collapse",
+                        attrs: { id: "collapseCategory" }
+                      },
+                      _vm._l(_vm.categories, function(category) {
+                        return _c(
+                          "ul",
+                          { key: category.id, staticClass: "text-left" },
+                          [
+                            _c(
+                              "li",
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    attrs: {
+                                      to: _vm.gender + "/" + category.slug
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(category.name))]
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._m(2),
+              _vm._v(" "),
+              _vm._l(_vm.brands, function(brand) {
+                return _c(
+                  "ul",
+                  {
+                    key: brand.id,
+                    staticClass: "collapse text-left",
+                    attrs: { id: "collapseBrands" }
+                  },
+                  [
+                    _c("li", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.userSelectedBrands,
+                            expression: "userSelectedBrands"
                           }
-                        } else {
-                          _vm.userSelectedBrands = $$c
+                        ],
+                        attrs: { type: "checkbox" },
+                        domProps: {
+                          value: brand.slug,
+                          checked: Array.isArray(_vm.userSelectedBrands)
+                            ? _vm._i(_vm.userSelectedBrands, brand.slug) > -1
+                            : _vm.userSelectedBrands
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.userSelectedBrands,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = brand.slug,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  (_vm.userSelectedBrands = $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  (_vm.userSelectedBrands = $$a
+                                    .slice(0, $$i)
+                                    .concat($$a.slice($$i + 1)))
+                              }
+                            } else {
+                              _vm.userSelectedBrands = $$c
+                            }
+                          }
                         }
-                      }
-                    }
-                  }),
-                  _vm._v("\n              Diesel\n          ")
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _vm._m(3),
-            _vm._v(" "),
-            _vm._m(4)
-          ])
+                      }),
+                      _vm._v(
+                        "\n              " + _vm._s(brand.name) + "\n          "
+                      )
+                    ])
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _vm._m(3),
+              _vm._v(" "),
+              _vm._m(4)
+            ],
+            2
+          )
         ]
       ),
       _vm._v(" "),
@@ -37981,7 +38064,7 @@ var render = function() {
             [
               _c(
                 "router-link",
-                { attrs: { to: "/produkt/" + product.id, id: "card-click" } },
+                { attrs: { to: "/produkt/" + product.slug, id: "card-click" } },
                 [
                   _c("img", {
                     staticClass: "card-img-top",
@@ -37990,7 +38073,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body" }, [
                     _c("p", { staticClass: "card-brand" }, [
-                      _vm._v(_vm._s(product.brand))
+                      _vm._v("sdfdsfdsfs")
                     ]),
                     _vm._v(" "),
                     _c("p", { staticClass: "card-name" }, [
@@ -38112,37 +38195,92 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "container mb-5" }, [
       _c("div", { staticClass: "row" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-8 col-md-6 col-sm-6 col-xs-12" }, [
+          _c("p", { staticClass: "sp-brand" }, [_vm._v("Brand-placeholder")]),
+          _vm._v(" "),
+          _c("p", { staticClass: "sp-name" }, [
+            _vm._v(_vm._s(_vm.product.name))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "sp-price" }, [
+            _vm._v(_vm._s(_vm.product.price) + ",-")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "sp-details" }, [
+            _vm._v(_vm._s(_vm.product.details))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "sp-description" }, [
+            _vm._v(_vm._s(_vm.product.description))
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(1)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "card col-lg-4 col-md-6 col-sm-6 col-xs-12" },
+      [
+        _c("img", {
+          staticClass: "card-img-top",
+          attrs: {
+            src: "img/men_hoodie.jpg",
+            alt: "...",
+            "data-toggle": "modal",
+            "data-target": "#imgModal"
+          }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "imgModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "imgModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
         _c(
           "div",
-          { staticClass: "card col-lg-3 col-md-4 col-sm-6 col-xs-12" },
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
-            _c("img", {
-              staticClass: "card-img-top",
-              attrs: { src: "img/men_hoodie.jpg", alt: "..." }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("p", { staticClass: "card-brand" }, [
-                _vm._v(_vm._s(_vm.product.brand))
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-name" }, [
-                _vm._v(_vm._s(_vm.product.name))
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-price" }, [
-                _vm._v(_vm._s(_vm.product.price) + ",-")
-              ])
+            _c("div", { staticClass: "modal-content" }, [
+              _c("img", {
+                attrs: {
+                  src: "img/men_hoodie.jpg",
+                  "data-dismiss": "modal",
+                  "aria-label": "Close"
+                }
+              })
             ])
           ]
         )
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
