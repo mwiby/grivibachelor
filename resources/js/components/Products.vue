@@ -2,6 +2,15 @@
 <template> 
   <!-- container for the whole page -->
   <div class="container">
+    <div class="row">
+      <div class="col-12 text-right">
+        <select class="selectpicker" v-model="userSelectedSorting">
+          <option selected>Standard sortering</option>
+          <option>Billigste først</option>
+          <option>Dyreste først</option>
+        </select>
+      </div>
+    </div>
     <!-- row for the filter on the left side -->
     <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center">
@@ -78,7 +87,7 @@
           v-bind:key="product.id"
         >
           <router-link v-bind:to="'/produkt/' + product.slug" id="card-click">
-            <img src="img/men_hoodie.jpg" class="card-img-top" alt="..." />
+            <img :src="'storage/' + product.image" class="card-img-top" alt="..." width="176" height="193" /> <!--  -->
             <div class="card-body">
               <p class="card-brand">sdfdsfdsfs</p>
               <p class="card-name">{{product.name}}</p>
@@ -103,7 +112,6 @@ export default {
 
       // Pather som blir lagret for api call og routes
       apiPathname: "",
-      pathname: "",
       gender: "",
 
       // Ting som kan bli filtrert på
@@ -112,6 +120,7 @@ export default {
 
       // Brukervalgte ting
       userSelectedBrands: [],
+      userSelectedSorting: '',
 
       // Route params
       catId: this.$route.params.catId,
@@ -120,29 +129,37 @@ export default {
       // doneFetching: false
     };
   },
+
   created() {
     this.getPathname(); // Henter pathname
     this.getProducts(); // Henter produkter
-    //this.getCategories(); // Henter kategorier
-    //this.getBrands(); // Henter merker
-    console.log("created");
+    this.getBrands(); // Henter merker
+    this.products = this.products.price.filter(this.filterNumbers(700, 800));
+
   },
 
-  /* Watcher om bruker har selektert noen brands */
+  
   watch: {
+    /* Watcher om bruker har selektert noen brands */
     userSelectedBrands: function() {
       if(this.userSelectedBrands.length == 0) {
         this.getProducts();
-        console.log("this.getProducts()")
       } 
       else {
         this.getProductsBrand();
-        console.log("userSelectedBrands function");
       }
     },
     brandProducts: function() {
       this.products = this.brandProducts;
-      console.log("brandProducts function");
+    },
+    /* Watcher om bruker har sortert */
+    userSelectedSorting: function() {
+      if(this.userSelectedSorting == "Billigste først"){
+        this.products.sort((a, b) => (a.price > b.price) ? 1 : -1);
+      }
+      else if (this.userSelectedSorting == "Dyreste først") {
+        this.products.sort((a, b) => (a.price < b.price) ? 1 : -1);
+      }
     }
   },
 
@@ -173,32 +190,26 @@ export default {
     getNewProducts() {
       axios({method: 'GET', url: 'clothes/' + this.apiPathname}).then(
         result => {
-          this.products = result.data;
-          console.log(result.data);
+          this.products = result.data.products;
+          this.categories = result.data.categories;
         });
     },
 
     // Får alle produktene av en spesifisert kategory
-    getProductsCategory() {
-      axios({method: 'GET', url: 'categories/man/' + this.catId}).then(
+    getProductsCategory() {                   
+      axios({method: 'GET', url: 'clothes/' + this.apiPathname + "/category/" + this.catId}).then(
         result => {
-          this.products = result.data;
+          this.products = result.data.products;
         });
-    },
-
-    // Får alle kategorier
-    getCategories() {
-      axios({method: 'GET', url: 'categories/'}).then(
-        result => {
-          this.categories = result.data;
-        });
+        var axiosCallet = 'clothes/' + this.apiPathname + "/category/" + this.catId;
+        console.log(axiosCallet);
     },
 
     // Får alle merker
     getBrands() {
       axios({method: 'GET', url: 'clothes/brands'}).then(
         result => {
-          this.brands = result.data;
+          this.brands = result.data.brands;
         });
     },
 
@@ -206,14 +217,16 @@ export default {
     getProductsBrand() {
       var testBrand = this.userSelectedBrands[0];
       if(this.userSelectedBrands.length > 0) {
-        axios({method: 'GET', url: 'brands/' + testBrand}).then(
+        axios({method: 'GET', url: 'clothes/brands/' + testBrand}).then(
           result => {
-            this.brandProducts = result.data;
-            // Fra lav til høy this.brandProducts.sort((a, b) => (a.price > b.price) ? 1 : -1);
-            // Fra høy til lav this.brandProducts.sort((a, b) => (a.price < b.price) ? 1 : -1);
+            this.brandProducts = result.data.products;
           });
       }
     },
+
+    filterNumbers(min, max) {
+      return function (a) { return a >= min && a <= max; };
+    }
 
 
   }

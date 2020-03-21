@@ -1,10 +1,19 @@
 <template>
   <div>
-    <div class="container mb-5">
+
+    <div class="text-center" v-if="isFetched == false">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <div class="container mb-5" v-else>
       <div class="row">
         <div class="card col-lg-4 col-md-6 col-sm-6 col-xs-12">
           <img
-            src="img/men_hoodie.jpg"
+            :src="'storage/' + product.image"
+            width="350"
+            height="420"
             class="card-img-top"
             alt="..."
             data-toggle="modal"
@@ -31,31 +40,35 @@
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <img src="img/men_hoodie.jpg" data-dismiss="modal" aria-label="Close" />
+          <img :src="'storage/' + product.image" data-dismiss="modal" aria-label="Close" />
         </div>
       </div>
     </div>
   </div>
+
+  
 </template>
 <script>
 export default {
   data() {
     return {
       id: this.$route.params.id,
-      product: {}
+      product: {},
+      isFetched: false
     };
   },
   created() {
     this.getProduct();
+    console.log(this.id);
   },
   // Henter produktet
   methods: {
     getProduct() {
+      this.isFetched = false;
       axios.get("product/" + this.id).then(
         response => {
-          let { data } = response;
-
-          this.product = data;
+          this.product = response.data.product;
+          this.isFetched = true;
         },
         error => {
           console.error(error);
