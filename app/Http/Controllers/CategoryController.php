@@ -17,11 +17,19 @@ class CategoryController extends Controller
     }
     public function show($gender,$c_slug){
         
-        $products = Product::whereHas('categories',function($query) use ($c_slug){
-            $query->where('slug',$c_slug);
-        })->where('gender', $gender)->get();
-        
-        return ['products' => $products];
+        if($gender == 'man' || $gender == 'woman'){
+
+            $products = Product::whereHas('categories',function($query) use ($c_slug){
+                $query->where('slug',$c_slug);
+            })->where('gender',($gender == 'woman'? 0 : 1))
+            ->with('brand')->get();
+
+            return ['products' => $products];
+        }
+        else{
+            return ['error' => 'Oppgi riktig Kjønn'];
+        }
+       
 
     }
 }

@@ -10,7 +10,7 @@ class BrandController extends Controller
     public function index(){
         
         $brands = Brand::all();
-        if($brands){
+        if(!$brands->isEmpty()){
             return ['brands' => $brands];
         }
         else{
@@ -19,19 +19,28 @@ class BrandController extends Controller
     
     }
   
-    public function show($slug){
+  
+public function show($gender,$c_slug){
 
-        $products= Brand::where('slug',$slug)->firstOrFail()->products;
-        
-
-        if($products->isEmpty()){
-            $products = 'Dette brandet har ingen nåværende produkter';
-            return $products;
-        }
-        else {
-            return ['products' => $products];
-        }
-        
+    if($gender !== 'woman' && $gender !== 'man'){
+        return ['error' => 'Feil data input'];
     }
+    else{
+        $brands = Brand::whereHas("products", function($productQuery)
+        use($gender, $c_slug) {
+    
+            return $productQuery->whereHas('categories', function($query) use ($c_slug){
+            
+                return $query->where('slug',$c_slug);
+                
+            })->where('gender',($gender == 'woman'? 0 : 1));
+        })
+        ->get();
+             
+            
+        return ['brands' => $brands];
+    }
+
+}
 
 }
