@@ -134,7 +134,6 @@ export default {
     this.getPathname(); // Henter pathname
     this.getProducts(); // Henter produkter
     this.getBrands(); // Henter merker
-    this.products = this.products.price.filter(this.filterNumbers(700, 800));
 
   },
 
@@ -223,10 +222,6 @@ export default {
           });
       }
     },
-
-    filterNumbers(min, max) {
-      return function (a) { return a >= min && a <= max; };
-    }
 
 
   }
