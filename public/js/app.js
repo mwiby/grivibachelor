@@ -1899,6 +1899,111 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Home.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Home.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      brands: []
+    };
+  },
+  created: function created() {
+    this.getBrands();
+  },
+  methods: {
+    // Får alle merker
+    getBrands: function getBrands() {
+      var _this = this;
+
+      axios({
+        method: 'GET',
+        url: 'clothes/brands'
+      }).then(function (result) {
+        _this.brands = result.data.brands;
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Products.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Products.vue?vue&type=script&lang=js& ***!
@@ -2001,6 +2106,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2010,13 +2124,13 @@ __webpack_require__.r(__webpack_exports__);
       brandProducts: [],
       // Pather som blir lagret for api call og routes
       apiPathname: "",
-      pathname: "",
       gender: "",
       // Ting som kan bli filtrert på
       categories: [],
       brands: [],
       // Brukervalgte ting
       userSelectedBrands: [],
+      userSelectedSorting: '',
       // Route params
       catId: this.$route.params.catId // Boolean for å se om vi har fått fetchet
       // doneFetching: false
@@ -2027,26 +2141,35 @@ __webpack_require__.r(__webpack_exports__);
     this.getPathname(); // Henter pathname
 
     this.getProducts(); // Henter produkter
-    //this.getCategories(); // Henter kategorier
-    //this.getBrands(); // Henter merker
 
-    console.log("created");
+    this.getBrands(); // Henter merker
+
+    this.products = this.products.price.filter(this.filterNumbers(700, 800));
   },
-
-  /* Watcher om bruker har selektert noen brands */
   watch: {
+    /* Watcher om bruker har selektert noen brands */
     userSelectedBrands: function userSelectedBrands() {
       if (this.userSelectedBrands.length == 0) {
         this.getProducts();
-        console.log("this.getProducts()");
       } else {
         this.getProductsBrand();
-        console.log("userSelectedBrands function");
       }
     },
     brandProducts: function brandProducts() {
       this.products = this.brandProducts;
-      console.log("brandProducts function");
+    },
+
+    /* Watcher om bruker har sortert */
+    userSelectedSorting: function userSelectedSorting() {
+      if (this.userSelectedSorting == "Billigste først") {
+        this.products.sort(function (a, b) {
+          return a.price > b.price ? 1 : -1;
+        });
+      } else if (this.userSelectedSorting == "Dyreste først") {
+        this.products.sort(function (a, b) {
+          return a.price < b.price ? 1 : -1;
+        });
+      }
     }
   },
   methods: {
@@ -2078,8 +2201,8 @@ __webpack_require__.r(__webpack_exports__);
         method: 'GET',
         url: 'clothes/' + this.apiPathname
       }).then(function (result) {
-        _this.products = result.data;
-        console.log(result.data);
+        _this.products = result.data.products;
+        _this.categories = result.data.categories;
       });
     },
     // Får alle produktene av en spesifisert kategory
@@ -2088,48 +2211,43 @@ __webpack_require__.r(__webpack_exports__);
 
       axios({
         method: 'GET',
-        url: 'categories/man/' + this.catId
+        url: 'clothes/' + this.apiPathname + "/category/" + this.catId
       }).then(function (result) {
-        _this2.products = result.data;
+        _this2.products = result.data.products;
       });
-    },
-    // Får alle kategorier
-    getCategories: function getCategories() {
-      var _this3 = this;
-
-      axios({
-        method: 'GET',
-        url: 'categories/'
-      }).then(function (result) {
-        _this3.categories = result.data;
-      });
+      var axiosCallet = 'clothes/' + this.apiPathname + "/category/" + this.catId;
+      console.log(axiosCallet);
     },
     // Får alle merker
     getBrands: function getBrands() {
-      var _this4 = this;
+      var _this3 = this;
 
       axios({
         method: 'GET',
         url: 'clothes/brands'
       }).then(function (result) {
-        _this4.brands = result.data;
+        _this3.brands = result.data.brands;
       });
     },
     // Får alle merker som er selektert
     getProductsBrand: function getProductsBrand() {
-      var _this5 = this;
+      var _this4 = this;
 
       var testBrand = this.userSelectedBrands[0];
 
       if (this.userSelectedBrands.length > 0) {
         axios({
           method: 'GET',
-          url: 'brands/' + testBrand
+          url: 'clothes/brands/' + testBrand
         }).then(function (result) {
-          _this5.brandProducts = result.data; // Fra lav til høy this.brandProducts.sort((a, b) => (a.price > b.price) ? 1 : -1);
-          // Fra høy til lav this.brandProducts.sort((a, b) => (a.price < b.price) ? 1 : -1);
+          _this4.brandProducts = result.data.products;
         });
       }
+    },
+    filterNumbers: function filterNumbers(min, max) {
+      return function (a) {
+        return a >= min && a <= max;
+      };
     }
   }
 });
@@ -2184,23 +2302,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       id: this.$route.params.id,
-      product: {}
+      product: {},
+      isFetched: false
     };
   },
   created: function created() {
     this.getProduct();
+    console.log(this.id);
   },
+  // Henter produktet
   methods: {
     getProduct: function getProduct() {
       var _this = this;
 
-      axios.get("products/" + this.id).then(function (response) {
-        var data = response.data;
-        _this.product = data;
+      this.isFetched = false;
+      axios.get("product/" + this.id).then(function (response) {
+        _this.product = response.data.product;
+        _this.isFetched = true;
       }, function (error) {
         console.error(error);
       });
@@ -37628,281 +37761,174 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("body", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "container py-3" }, [
+      _c("h1", { staticClass: "text-center" }, [_vm._v("Våre merkervarer")]),
+      _vm._v(" "),
+      _c("p", { staticClass: "section-description" }, [
+        _vm._v(
+          "Lorem ipsum dolor sit, amet consectetur adipisicing elit. \n            At obcaecati natus eius ex. Nostrum debitis a tempore laboriosam optio tenetur animi dolore sequi \n            officiis, voluptas facere! Debitis nam porro impedit?"
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row text-center" },
+        [
+          _vm._l(_vm.brands, function(brand) {
+            return _c(
+              "div",
+              {
+                key: brand.id,
+                staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12"
+              },
+              [
+                _c("a", { attrs: { href: "", target: "blank" } }, [
+                  _c("img", {
+                    attrs: {
+                      src: "storage/" + brand.image,
+                      alt: "product",
+                      width: "230",
+                      height: "140"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("a", { attrs: { href: "#" } }, [
+                  _c("div", { staticClass: "product-name" }, [
+                    _vm._v(_vm._s(brand.name))
+                  ])
+                ])
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _vm._m(1)
+        ],
+        2
+      )
+    ]),
+    _vm._v(" "),
+    _vm._m(2)
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("body", [
-      _c("header", [
-        _c("div", { staticClass: "sass-container row" }, [
-          _c(
-            "div",
-            { staticClass: "col-lg-6 col-md-12 text-center px-2 py-2" },
-            [
-              _c("h1", [_vm._v("Sjekk vårt utvalg")]),
-              _vm._v(" "),
-              _c("p", [
-                _vm._v(
-                  "Her kan du finne herre og dame klær i tilgjengelig hos oss i Bøgata"
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row justify-content-center" }, [
-                _c("div", { staticClass: "py-3" }, [
-                  _c("a", { staticClass: "button", attrs: { href: "#" } }, [
-                    _vm._v("Herre ")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "py-3" }, [
-                  _c("a", { staticClass: "button", attrs: { href: "#" } }, [
-                    _vm._v("Dame")
-                  ])
-                ])
-              ])
-            ]
-          ),
+    return _c("header", [
+      _c("div", { staticClass: "sass-container row" }, [
+        _c("div", { staticClass: "col-lg-6 col-md-12 text-center px-2 py-2" }, [
+          _c("h1", [_vm._v("Sjekk vårt utvalg")]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-lg-6 col-md-12 px-2 py-2" }, [
-            _c("img", {
-              attrs: { src: "img/utvalg.jpg", width: "100%", height: "100%" }
-            })
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container py-3" }, [
-        _c("h1", { staticClass: "text-center" }, [_vm._v("Våre merkervarer")]),
-        _vm._v(" "),
-        _c("p", { staticClass: "section-description" }, [
-          _vm._v(
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. \n            At obcaecati natus eius ex. Nostrum debitis a tempore laboriosam optio tenetur animi dolore sequi \n            officiis, voluptas facere! Debitis nam porro impedit?"
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row text-center" }, [
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c(
-              "a",
-              { attrs: { href: "https://www.frislid.no/", target: "blank" } },
-              [
-                _c("img", {
-                  attrs: {
-                    src: "storage/frislid.png",
-                    alt: "product",
-                    width: "230",
-                    height: "140"
-                  }
-                })
-              ]
-            ),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("Frislid")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/diesel.png",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("Diesel")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/nn07.jpg",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("NN07")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/replay.png",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("Replay")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/ella.png",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("Ella&il")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/borg.png",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("Bjørn Borg")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/lineofoslo.png",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [
-                _vm._v("Line of Oslo")
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", {
-                attrs: {
-                  src: "storage/arniesays.png",
-                  alt: "product",
-                  width: "230",
-                  height: "140"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("div", { staticClass: "product-name" }, [_vm._v("Arnie says")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 text-center my-5" }, [
-            _c("a", { staticClass: "button", attrs: { href: "#" } }, [
-              _vm._v("Vis flere merker")
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "instaBackground pb-5 pt-3" }, [
-        _c("div", { staticClass: "container " }, [
-          _c("h1", { staticClass: "text-center" }, [
-            _vm._v("Følg oss på Instagram")
-          ]),
-          _vm._v(" "),
-          _c("p", { staticClass: "section-description text-center my-5" }, [
+          _c("p", [
             _vm._v(
-              "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et sed accusantium maxime dolore cum provident itaque ea, a architecto alias quod reiciendis ex ullam id, soluta deleniti eaque neque perferendis."
+              "Her kan du finne herre og dame klær i tilgjengelig hos oss i Bøgata"
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
-              _c("a", { attrs: { href: "#" } }, [
-                _c("img", {
-                  attrs: { src: "img/insta1.png", alt: "blog image" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("a", { attrs: { href: "#" } }, [
-                _c("h2", { staticClass: "blog-title" }, [_vm._v("Sjekk denne")])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "blog-description" }, [
-                _vm._v(
-                  "Sjekk denne herlige trenchen fra @arniesays 🤩🤩 God søndag❣️"
-                )
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "py-3" }, [
+              _c("a", { staticClass: "button", attrs: { href: "#" } }, [
+                _vm._v("Herre ")
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
-              _c("a", { attrs: { href: "#" } }, [
-                _c("img", {
-                  attrs: { src: "img/insta2.png", alt: "blog image" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("a", { attrs: { href: "#" } }, [
-                _c("h2", { staticClass: "blog-title" }, [
-                  _vm._v("Fantastisk flotte")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "blog-description" }, [
-                _vm._v(
-                  "Fantastisk flotte basicnyheter fra @ellaandil 🤩😍Velkommen❣️#godlørdag #handlelokalt #sentrumsbutikkene"
-                )
+            _c("div", { staticClass: "py-3" }, [
+              _c("a", { staticClass: "button", attrs: { href: "#" } }, [
+                _vm._v("Dame")
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-6 col-md-12 px-2 py-2" }, [
+          _c("img", {
+            attrs: { src: "img/utvalg.jpg", width: "100%", height: "100%" }
+          })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12 text-center my-5" }, [
+      _c("a", { staticClass: "button", attrs: { href: "#" } }, [
+        _vm._v("Vis flere merker")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "instaBackground pb-5 pt-3" }, [
+      _c("div", { staticClass: "container " }, [
+        _c("h1", { staticClass: "text-center" }, [
+          _vm._v("Følg oss på Instagram")
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "section-description text-center my-5" }, [
+          _vm._v(
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et sed accusantium maxime dolore cum provident itaque ea, a architecto alias quod reiciendis ex ullam id, soluta deleniti eaque neque perferendis."
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
+            _c("a", { attrs: { href: "#" } }, [
+              _c("img", { attrs: { src: "img/insta1.png", alt: "blog image" } })
+            ]),
+            _vm._v(" "),
+            _c("a", { attrs: { href: "#" } }, [
+              _c("h2", { staticClass: "blog-title" }, [_vm._v("Sjekk denne")])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "blog-description" }, [
+              _vm._v(
+                "Sjekk denne herlige trenchen fra @arniesays 🤩🤩 God søndag❣️"
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
+            _c("a", { attrs: { href: "#" } }, [
+              _c("img", { attrs: { src: "img/insta2.png", alt: "blog image" } })
+            ]),
+            _vm._v(" "),
+            _c("a", { attrs: { href: "#" } }, [
+              _c("h2", { staticClass: "blog-title" }, [
+                _vm._v("Fantastisk flotte")
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
-              _c("a", { attrs: { href: "#" } }, [
-                _c("img", {
-                  attrs: { src: "img/insta3.png", alt: "blog image" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("a", { attrs: { href: "#" } }, [
-                _c("h2", { staticClass: "blog-title" }, [
-                  _vm._v("Innkjøp AW2020")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "blog-description" }, [
-                _vm._v(
-                  "Innkjøp AW2020👌😍Lekre farger og kvaliteter❣️@ellaandil @norwegianfashioncenter"
-                )
+            _c("div", { staticClass: "blog-description" }, [
+              _vm._v(
+                "Fantastisk flotte basicnyheter fra @ellaandil 🤩😍Velkommen❣️#godlørdag #handlelokalt #sentrumsbutikkene"
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
+            _c("a", { attrs: { href: "#" } }, [
+              _c("img", { attrs: { src: "img/insta3.png", alt: "blog image" } })
+            ]),
+            _vm._v(" "),
+            _c("a", { attrs: { href: "#" } }, [
+              _c("h2", { staticClass: "blog-title" }, [
+                _vm._v("Innkjøp AW2020")
               ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "blog-description" }, [
+              _vm._v(
+                "Innkjøp AW2020👌😍Lekre farger og kvaliteter❣️@ellaandil @norwegianfashioncenter"
+              )
             ])
           ])
         ])
@@ -37932,6 +37958,49 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12 text-right" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.userSelectedSorting,
+                expression: "userSelectedSorting"
+              }
+            ],
+            staticClass: "selectpicker",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.userSelectedSorting = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { selected: "" } }, [
+              _vm._v("Standard sortering")
+            ]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Billigste først")]),
+            _vm._v(" "),
+            _c("option", [_vm._v("Dyreste først")])
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c(
         "div",
@@ -38068,7 +38137,12 @@ var render = function() {
                 [
                   _c("img", {
                     staticClass: "card-img-top",
-                    attrs: { src: "img/men_hoodie.jpg", alt: "..." }
+                    attrs: {
+                      src: "storage/" + product.image,
+                      alt: "...",
+                      width: "176",
+                      height: "193"
+                    }
                   }),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body" }, [
@@ -38195,61 +38269,53 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "container mb-5" }, [
-      _c("div", { staticClass: "row" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-lg-8 col-md-6 col-sm-6 col-xs-12" }, [
-          _c("p", { staticClass: "sp-brand" }, [_vm._v("Brand-placeholder")]),
-          _vm._v(" "),
-          _c("p", { staticClass: "sp-name" }, [
-            _vm._v(_vm._s(_vm.product.name))
-          ]),
-          _vm._v(" "),
-          _c("p", { staticClass: "sp-price" }, [
-            _vm._v(_vm._s(_vm.product.price) + ",-")
-          ]),
-          _vm._v(" "),
-          _c("p", { staticClass: "sp-details" }, [
-            _vm._v(_vm._s(_vm.product.details))
-          ]),
-          _vm._v(" "),
-          _c("p", { staticClass: "sp-description" }, [
-            _vm._v(_vm._s(_vm.product.description))
+    _vm.isFetched == false
+      ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
+      : _c("div", { staticClass: "container mb-5" }, [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "card col-lg-4 col-md-6 col-sm-6 col-xs-12" },
+              [
+                _c("img", {
+                  staticClass: "card-img-top",
+                  attrs: {
+                    src: "storage/" + _vm.product.image,
+                    width: "350",
+                    height: "420",
+                    alt: "...",
+                    "data-toggle": "modal",
+                    "data-target": "#imgModal"
+                  }
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-8 col-md-6 col-sm-6 col-xs-12" }, [
+              _c("p", { staticClass: "sp-brand" }, [
+                _vm._v("Brand-placeholder")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "sp-name" }, [
+                _vm._v(_vm._s(_vm.product.name))
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "sp-price" }, [
+                _vm._v(_vm._s(_vm.product.price) + ",-")
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "sp-details" }, [
+                _vm._v(_vm._s(_vm.product.details))
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "sp-description" }, [
+                _vm._v(_vm._s(_vm.product.description))
+              ])
+            ])
           ])
-        ])
-      ])
-    ]),
+        ]),
     _vm._v(" "),
-    _vm._m(1)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "card col-lg-4 col-md-6 col-sm-6 col-xs-12" },
-      [
-        _c("img", {
-          staticClass: "card-img-top",
-          attrs: {
-            src: "img/men_hoodie.jpg",
-            alt: "...",
-            "data-toggle": "modal",
-            "data-target": "#imgModal"
-          }
-        })
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
+    _c(
       "div",
       {
         staticClass: "modal fade",
@@ -38269,7 +38335,7 @@ var staticRenderFns = [
             _c("div", { staticClass: "modal-content" }, [
               _c("img", {
                 attrs: {
-                  src: "img/men_hoodie.jpg",
+                  src: "storage/" + _vm.product.image,
                   "data-dismiss": "modal",
                   "aria-label": "Close"
                 }
@@ -38278,6 +38344,18 @@ var staticRenderFns = [
           ]
         )
       ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "spinner-border", attrs: { role: "status" } },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
     )
   }
 ]
@@ -53563,15 +53641,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Home_vue_vue_type_template_id_f2b6376c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Home.vue?vue&type=template&id=f2b6376c& */ "./resources/js/components/Home.vue?vue&type=template&id=f2b6376c&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Home.vue?vue&type=script&lang=js& */ "./resources/js/components/Home.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _Home_vue_vue_type_template_id_f2b6376c___WEBPACK_IMPORTED_MODULE_0__["render"],
   _Home_vue_vue_type_template_id_f2b6376c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -53585,6 +53665,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/Home.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Home.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/Home.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Home.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Home.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -53764,7 +53858,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mode: 'history',
   linkActiveClass: 'font-bold',
   routes: [{
     path: '/',
