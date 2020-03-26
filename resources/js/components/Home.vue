@@ -41,7 +41,7 @@
                 </div> <!-- end products -->
             </div>  <!-- end container -->
 
-            <div class="instaBackground pb-5 pt-3">
+        <div class="grayBackground pb-5 pt-3">
             <div class="container ">
                 <h1 class="text-center">Følg oss på Instagram</h1>
 
@@ -64,7 +64,7 @@
                     </div>
                 </div> <!-- end blog-posts -->
             </div> <!-- end container -->
-            </div>
+        </div>
     </body>
 </template>
 
