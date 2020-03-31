@@ -21,7 +21,7 @@
           />
         </div>
         <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-          <p class="sp-brand">Brand-placeholder</p>
+          <p class="sp-brand">{{product.brand.name}}</p>
           <p class="sp-name">{{product.name}}</p>
           <p class="sp-price">{{product.price}},-</p>
           <p class="sp-details">{{product.details}}</p>
@@ -59,7 +59,6 @@ export default {
   },
   created() {
     this.getProduct();
-    console.log(this.id);
   },
   // Henter produktet
   methods: {

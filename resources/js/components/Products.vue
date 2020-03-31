@@ -44,45 +44,55 @@
     <!-- container for the whole page -->
     <div class="container">
       <div class="row pb-3" v-if="catId">
-
-        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
-        <div class="dropdown">
-          <button class="btn btn-default shadow-none dropdown-toggle" type="button" id="dropdownMenuButton filterButton" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false"
-          >Filtrer på merker</button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <ul id="padding-none" v-for="brand in brands" v-bind:key="brand.id">
-              <li class="dropdown-item">
-                <div class="filter-checkbox">
-                  <input class="noCheckbox" type="checkbox" v-bind:value="brand.slug" v-bind:id="brand.slug" v-model="userSelectedBrands" />
-                  <label v-bind:for="brand.slug">{{brand.name}}</label>
-                </div>
-              </li>
-            </ul>
+        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12 mb-1">
+          <div class="dropdown">
+            <button
+              class="btn btn-default dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton filterButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >Filtrer på merker</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <ul id="padding-none" v-for="brand in brands" v-bind:key="brand.id">
+                <li class="dropdown-item">
+                  <div class="filter-checkbox">
+                    <input
+                      class="noCheckbox"
+                      type="checkbox"
+                      v-bind:value="brand.slug"
+                      v-bind:id="brand.slug"
+                      v-model="userSelectedBrands"
+                    />
+                    <label v-bind:for="brand.slug">{{brand.name}}</label>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        </div>
-        
-        <!-- Spacer -->
-        <div class="col-lg-7 col-md-2 col-sm-0 col-xs-0"></div>
 
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-          <select class="form-control custom-select" v-model="userSelectedSorting">
+        <!-- Spacer -->
+        <div class="col-lg-6 col-md-4 col-sm-2 col-xs-0"></div>
+
+        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+          <select v-model="userSelectedSorting">
             <option>Standard sortering</option>
             <option>Billigste først</option>
             <option>Dyreste først</option>
           </select>
         </div>
-
-      </div> <!-- End row -->
+      </div>
+      <!-- End row -->
 
       <!-- Selected brands -->
       <div class="row">
-        <ul v-for="(brand, index) in userSelectedBrands" v-bind:key="index">
+        <div class=" ml-3" v-for="(brand, index) in userSelectedBrands" v-bind:key="index">
           <a class="button2" v-on:click="removeUserselectedBrands(index)">
-            <li>{{brand | remove- | firstLetterUpper}} x</li>
+           <div> {{brand | remove- | firstLetterUpper}} x </div> 
           </a>
-        </ul>
+        </div>
       </div>
 
       <!-- Spinner mens klæra blir fetcha -->
@@ -112,7 +122,7 @@
               />
               <!--  -->
               <div class="card-body">
-                <p class="card-brand">eswgfsdgfds</p>
+                <p v-if="catId" class="card-brand">{{product.brand.name}}</p>
                 <p class="card-name">{{product.name}}</p>
                 <p class="card-price">{{product.price}},-</p>
               </div>
@@ -128,6 +138,9 @@
 export default {
   data() {
     return {
+      // Lagring av alle produktene på ett sted
+      allProducts: [],
+
       // Produkter som vises
       products: [],
 
@@ -154,6 +167,12 @@ export default {
     };
   },
 
+  computed:{
+    productsBrand() {
+       return this.job.location ? this.job.location.name : '';
+    }
+  },
+
   created() {
     this.getPathname(); // Henter pathname
     this.getProducts(); // Henter produkter
@@ -165,18 +184,9 @@ export default {
     userSelectedBrands: function() {
       if (this.userSelectedBrands.length == 0) {
         this.getProducts();
-      } else {
-       // this.getProductsBrand();
-        //console.log(this.products[0].brand.slug);
-        //console.log(this.userSelectedBrands[0]);
-        for(var i=0; i<=this.userSelectedBrands.length; i++){
-          if(this.products[0].brand.slug == this.userSelectedBrands[i]) {
-            console.log("hei")
-          }
-          else {
-            console.log("no")
-          }
-        }
+      } 
+      else {
+        this.getProductsBrand();
       }
     },
     brandProducts: function() {
@@ -184,10 +194,12 @@ export default {
     },
     /* Watcher om bruker har sortert */
     userSelectedSorting: function() {
-      if (this.userSelectedSorting == "Billigste først") {
-        this.products.sort((a, b) => (a.price > b.price ? 1 : -1));
+      if (this.userSelectedSorting == "Standard sortering" ) {
+        this.products.sort((a, b) => (a.id > b.id) ? 1 : -1)
+      } else if (this.userSelectedSorting == "Billigste først") {
+          this.products.sort((a, b) => (a.price > b.price ? 1 : -1));
       } else if (this.userSelectedSorting == "Dyreste først") {
-        this.products.sort((a, b) => (a.price < b.price ? 1 : -1));
+          this.products.sort((a, b) => (a.price < b.price ? 1 : -1));
       }
     },
     /* Watcher om bruker har gått inn på en  kategori */
@@ -222,7 +234,7 @@ export default {
 
     // Får 9 nyeste produkter fra enten mann eller dame
     getNewProducts() {
-      axios({ method: "GET", url: "clothes/" + this.apiPathname }).then(
+      axios.get("clothes/" + this.apiPathname ).then(
         result => {
           this.products = result.data.products;
           this.categories = result.data.categories;
@@ -233,33 +245,35 @@ export default {
 
     // Får alle produktene av en spesifisert kategory
     getProductsCategory() {
-      axios({method: "GET", url: "clothes/" + this.apiPathname + "/category/" + this.catId
-      }).then(result => {
+      axios.get("clothes/" + this.apiPathname + "/category/" + this.catId).then(result => {
         this.products = result.data.products;
+        this.allProducts = result.data.products;
         this.isFetched = true;
-      });
-    },
-
-    // Får alle merker
-    getBrands() {
-      axios({ method: "GET", url: "clothes/brands" }).then(result => {
-        this.brands = result.data.brands;
       });
     },
 
     // Returnerer bare brands som eksisterer i oppgitt kategori
     getBrands() {
-      axios({
-        method: "GET",
-        url:
-          "/clothes/" + this.apiPathname + "/category/" + this.catId + "/brands"
-      }).then(result => {
+      axios.get("/clothes/" + this.apiPathname + "/category/" + this.catId + "/brands").then(result => {
         this.brands = result.data.brands;
       });
     },
 
     // Får alle merker som er selektert
     getProductsBrand() {
+      this.products = this.allProducts;
+      const sortedProducts = [];
+
+      this.products.forEach((e1)=>this.userSelectedBrands.forEach((e2)=>
+        {
+          if(e1.brand.slug == e2){
+            sortedProducts.push(e1);
+          }
+        }
+      ));
+      this.products = sortedProducts;
+
+      /*
       var sortedProducts = [];
       for(var i=0; i<=this.userSelectedBrands.length; i++) {
         for(var j=0; j<=this.products.length; j++) {
@@ -269,6 +283,7 @@ export default {
           }
         }
       this.products = sortedProducts;
+      */
     },
     removeUserselectedBrands(index) {
       this.userSelectedBrands.splice(index, 1);

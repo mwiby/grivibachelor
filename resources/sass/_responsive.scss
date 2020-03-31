@@ -14,10 +14,16 @@
     width: 155px;
     height: 155px;
   }
+  #banner-picture {
+    display: none;
+  }
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (max-width: 480px) {
+  #banner-picture {
+    display: none;
+  }
 }
 
 /* Custom, iPhone Retina */
