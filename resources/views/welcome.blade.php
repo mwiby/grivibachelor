@@ -53,8 +53,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <ul>
                             <li><h2>Kontakt oss:</h2></li>
-                            <li><i class="fas fa-phone"></i> 35 95 24 24</li>
-                            <li><i class="far fa-envelope"></i> ggrivi@gmail.com</li>
+                            <li><i class="fas fa-phone"></i> 90 62 41 76</li>
+                            <li><i class="far fa-envelope"></i> anund@grivi.no</li>
                         </ul>
                     </div>
                     <!-- column for social media -->

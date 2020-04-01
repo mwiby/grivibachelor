@@ -264,10 +264,14 @@ a.btn-white {
   color: black;
 }
 
+/* underline on checked checkbox */
+
 .filter-checkbox input[type=checkbox]:checked + label {
   font-weight: bold;
   text-decoration: underline;
 }
+
+/* removes checkbox on input*/
 
 .noCheckbox {
   -webkit-appearance: none;
@@ -277,7 +281,7 @@ a.btn-white {
 
 /* end of style for filtering clothes */
 
-/* bootstrap css overwrite */
+/* bootstrap css overwrite / dropdown button for filterin on product page */
 
 .dropdown-menu {
   border-radius: 0px;
@@ -358,7 +362,7 @@ a.button2:active {
   border-color: gray;
 }
 
-/* Select styling */
+/* Style for select dropdown on product page*/
 
 select {
   color: black;
@@ -392,6 +396,14 @@ select:focus {
   background-color: white;
   border: 1px solid black;
   box-shadow: none;
+}
+
+/* header style for contact page */
+
+.contact-header {
+  font-size: 35px;
+  padding-top: 0px;
+  margin-top: 0px;
 }
 
 /* Medium Devices, Desktops */
