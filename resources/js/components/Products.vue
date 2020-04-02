@@ -33,7 +33,8 @@
           </div>
 
           <div class="col-lg-4 col-md-6 col-sm-12 py-2 justify-content-right">
-            <img id="banner-picture" src="img/grivibilde2.png" alt="image" />
+            <img v-if="gender == 'dame'" id="banner-picture" src="img/grivibilde2.png" alt="image" />
+            <img v-else id="banner-picture" src="img/grivibilde.png" alt="image" />
           </div>
         </div>
         <!-- end category -->
@@ -113,7 +114,7 @@
             v-bind:key="product.id"
           >
             <router-link v-bind:to="'/produkt/' + product.slug" id="card-click">
-              <img
+              <img 
                 :src="'storage/' + product.image"
                 class="card-img-top"
                 alt="..."
@@ -144,9 +145,6 @@ export default {
       // Produkter som vises
       products: [],
 
-      // Produkter som blir hentet utifra brands
-      brandProducts: [],
-
       // Pather som blir lagret for api call og routes
       apiPathname: "",
       gender: "",
@@ -167,12 +165,6 @@ export default {
     };
   },
 
-  computed:{
-    productsBrand() {
-       return this.job.location ? this.job.location.name : '';
-    }
-  },
-
   created() {
     this.getPathname(); // Henter pathname
     this.getProducts(); // Henter produkter
@@ -188,9 +180,6 @@ export default {
       else {
         this.getProductsBrand();
       }
-    },
-    brandProducts: function() {
-      this.products = this.brandProducts;
     },
     /* Watcher om bruker har sortert */
     userSelectedSorting: function() {
@@ -272,18 +261,6 @@ export default {
         }
       ));
       this.products = sortedProducts;
-
-      /*
-      var sortedProducts = [];
-      for(var i=0; i<=this.userSelectedBrands.length; i++) {
-        for(var j=0; j<=this.products.length; j++) {
-            if(this.products[j].brand.slug == this.userSelectedBrands[i]) {
-              sortedProducts.push(this.products[j]);
-            }
-          }
-        }
-      this.products = sortedProducts;
-      */
     },
     removeUserselectedBrands(index) {
       this.userSelectedBrands.splice(index, 1);
