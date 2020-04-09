@@ -2013,6 +2013,34 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2130,11 +2158,11 @@ __webpack_require__.r(__webpack_exports__);
       brands: [],
       // Brukervalgte ting
       userSelectedBrands: [],
-      userSelectedSorting: '',
+      userSelectedSorting: "Standard sortering",
       // Route params
-      catId: this.$route.params.catId // Boolean for å se om vi har fått fetchet
-      // doneFetching: false
-
+      catId: this.$route.params.catId,
+      // Boolean for å se om vi har fått fetchet
+      isFetched: false
     };
   },
   created: function created() {
@@ -2143,8 +2171,6 @@ __webpack_require__.r(__webpack_exports__);
     this.getProducts(); // Henter produkter
 
     this.getBrands(); // Henter merker
-
-    this.products = this.products.price.filter(this.filterNumbers(700, 800));
   },
   watch: {
     /* Watcher om bruker har selektert noen brands */
@@ -2152,7 +2178,16 @@ __webpack_require__.r(__webpack_exports__);
       if (this.userSelectedBrands.length == 0) {
         this.getProducts();
       } else {
-        this.getProductsBrand();
+        // this.getProductsBrand();
+        //console.log(this.products[0].brand.slug);
+        //console.log(this.userSelectedBrands[0]);
+        for (var i = 0; i <= this.userSelectedBrands.length; i++) {
+          if (this.products[0].brand.slug == this.userSelectedBrands[i]) {
+            console.log("hei");
+          } else {
+            console.log("no");
+          }
+        }
       }
     },
     brandProducts: function brandProducts() {
@@ -2170,18 +2205,25 @@ __webpack_require__.r(__webpack_exports__);
           return a.price < b.price ? 1 : -1;
         });
       }
+    },
+
+    /* Watcher om bruker har gått inn på en  kategori */
+    catId: function catId() {
+      if (this.catId) {
+        this.getBrands();
+      }
     }
   },
-  methods: {
+  methods: (_methods = {
     getPathname: function getPathname() {
       // Sjekker om det er dame eller herre
       var pathname = window.location.href;
 
       if (pathname.includes("herre") == true) {
-        this.apiPathname = 'man';
+        this.apiPathname = "man";
         this.gender = "herre";
       } else if (pathname.includes("dame")) {
-        this.apiPathname = 'woman';
+        this.apiPathname = "woman";
         this.gender = "dame";
       }
     },
@@ -2198,11 +2240,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios({
-        method: 'GET',
-        url: 'clothes/' + this.apiPathname
+        method: "GET",
+        url: "clothes/" + this.apiPathname
       }).then(function (result) {
         _this.products = result.data.products;
         _this.categories = result.data.categories;
+        _this.isFetched = true;
       });
     },
     // Får alle produktene av en spesifisert kategory
@@ -2210,46 +2253,49 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios({
-        method: 'GET',
-        url: 'clothes/' + this.apiPathname + "/category/" + this.catId
+        method: "GET",
+        url: "clothes/" + this.apiPathname + "/category/" + this.catId
       }).then(function (result) {
         _this2.products = result.data.products;
+        _this2.isFetched = true;
       });
-      var axiosCallet = 'clothes/' + this.apiPathname + "/category/" + this.catId;
-      console.log(axiosCallet);
     },
     // Får alle merker
     getBrands: function getBrands() {
       var _this3 = this;
 
       axios({
-        method: 'GET',
-        url: 'clothes/brands'
+        method: "GET",
+        url: "clothes/brands"
       }).then(function (result) {
         _this3.brands = result.data.brands;
       });
-    },
-    // Får alle merker som er selektert
-    getProductsBrand: function getProductsBrand() {
-      var _this4 = this;
-
-      var testBrand = this.userSelectedBrands[0];
-
-      if (this.userSelectedBrands.length > 0) {
-        axios({
-          method: 'GET',
-          url: 'clothes/brands/' + testBrand
-        }).then(function (result) {
-          _this4.brandProducts = result.data.products;
-        });
-      }
-    },
-    filterNumbers: function filterNumbers(min, max) {
-      return function (a) {
-        return a >= min && a <= max;
-      };
     }
-  }
+  }, _defineProperty(_methods, "getBrands", function getBrands() {
+    var _this4 = this;
+
+    axios({
+      method: "GET",
+      url: "/clothes/" + this.apiPathname + "/category/" + this.catId + "/brands"
+    }).then(function (result) {
+      _this4.brands = result.data.brands;
+    });
+  }), _defineProperty(_methods, "getProductsBrand", function getProductsBrand() {
+    var sortedProducts = [];
+
+    for (var i = 0; i <= this.userSelectedBrands.length; i++) {
+      for (var j = 0; j <= this.products.length; j++) {
+        if (this.products[j].brand.slug == this.userSelectedBrands[i]) {
+          sortedProducts.push(this.products[j]);
+        }
+      }
+    }
+
+    this.products = sortedProducts;
+  }), _defineProperty(_methods, "removeUserselectedBrands", function removeUserselectedBrands(index) {
+    this.userSelectedBrands.splice(index, 1);
+  }), _methods) // End of methods
+
 });
 
 /***/ }),
@@ -37867,7 +37913,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "instaBackground pb-5 pt-3" }, [
+    return _c("div", { staticClass: "grayBackground pb-5 pt-3" }, [
       _c("div", { staticClass: "container " }, [
         _c("h1", { staticClass: "text-center" }, [
           _vm._v("Følg oss på Instagram")
@@ -37957,215 +38003,303 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 text-right" }, [
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.userSelectedSorting,
-                expression: "userSelectedSorting"
-              }
-            ],
-            staticClass: "selectpicker",
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.userSelectedSorting = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { selected: "" } }, [
-              _vm._v("Standard sortering")
-            ]),
-            _vm._v(" "),
-            _c("option", [_vm._v("Billigste først")]),
-            _vm._v(" "),
-            _c("option", [_vm._v("Dyreste først")])
-          ]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center" },
-        [
+  return _c("div", [
+    _vm.catId
+      ? _c("nav", { attrs: { "aria-label": "breadcrumb" } }, [
           _c(
-            "div",
+            "ol",
+            { staticClass: "breadcrumb grayBackground left-padding" },
             [
-              _vm._m(0),
-              _vm._v(" "),
-              _vm.catId == null
-                ? _c("div", [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "collapse",
-                        attrs: { id: "collapseCategory" }
-                      },
-                      _vm._l(_vm.categories, function(category) {
-                        return _c(
-                          "ul",
-                          { key: category.id, staticClass: "text-left" },
-                          [
-                            _c(
-                              "li",
-                              [
-                                _c(
-                                  "router-link",
-                                  {
-                                    attrs: {
-                                      to: _vm.gender + "/" + category.slug
-                                    }
-                                  },
-                                  [_vm._v(_vm._s(category.name))]
-                                )
-                              ],
-                              1
-                            )
-                          ]
-                        )
-                      }),
-                      0
-                    )
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _vm._m(2),
-              _vm._v(" "),
-              _vm._l(_vm.brands, function(brand) {
-                return _c(
-                  "ul",
+              _c("router-link", { attrs: { to: "/" + _vm.gender } }, [
+                _c(
+                  "li",
                   {
-                    key: brand.id,
-                    staticClass: "collapse text-left",
-                    attrs: { id: "collapseBrands" }
+                    staticClass: "breadcrumb-item",
+                    attrs: { "aria-current": "page" }
                   },
                   [
-                    _c("li", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.userSelectedBrands,
-                            expression: "userSelectedBrands"
-                          }
-                        ],
-                        attrs: { type: "checkbox" },
-                        domProps: {
-                          value: brand.slug,
-                          checked: Array.isArray(_vm.userSelectedBrands)
-                            ? _vm._i(_vm.userSelectedBrands, brand.slug) > -1
-                            : _vm.userSelectedBrands
-                        },
-                        on: {
-                          change: function($event) {
-                            var $$a = _vm.userSelectedBrands,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = brand.slug,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  (_vm.userSelectedBrands = $$a.concat([$$v]))
-                              } else {
-                                $$i > -1 &&
-                                  (_vm.userSelectedBrands = $$a
-                                    .slice(0, $$i)
-                                    .concat($$a.slice($$i + 1)))
-                              }
-                            } else {
-                              _vm.userSelectedBrands = $$c
-                            }
-                          }
-                        }
-                      }),
-                      _vm._v(
-                        "\n              " + _vm._s(brand.name) + "\n          "
-                      )
-                    ])
+                    _vm._v(
+                      _vm._s(_vm._f("firstLetterUpper")(_vm.gender)) + " >"
+                    )
                   ]
                 )
-              }),
+              ]),
               _vm._v(" "),
-              _vm._m(3),
-              _vm._v(" "),
-              _vm._m(4)
-            ],
-            2
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "row col-lg-9 col-md-9 col-sm-12 col-xs-12",
-          attrs: { id: "card-row" }
-        },
-        _vm._l(_vm.products, function(product) {
-          return _c(
-            "div",
-            {
-              key: product.id,
-              staticClass: "card col-lg-3 col-md-4 col-sm-6 col-xs-12"
-            },
-            [
               _c(
-                "router-link",
-                { attrs: { to: "/produkt/" + product.slug, id: "card-click" } },
+                "li",
+                {
+                  staticClass: "breadcrumb-item",
+                  staticStyle: { "font-weight": "bold" },
+                  attrs: { "aria-current": "page" }
+                },
                 [
-                  _c("img", {
-                    staticClass: "card-img-top",
-                    attrs: {
-                      src: "storage/" + product.image,
-                      alt: "...",
-                      width: "176",
-                      height: "193"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("p", { staticClass: "card-brand" }, [
-                      _vm._v("sdfdsfdsfs")
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-name" }, [
-                      _vm._v(_vm._s(product.name))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-price" }, [
-                      _vm._v(_vm._s(product.price) + ",-")
-                    ])
-                  ])
+                  _vm._v(
+                    " " +
+                      _vm._s(
+                        _vm._f("firstLetterUpper")(_vm._f("remove-")(_vm.catId))
+                      )
+                  )
                 ]
               )
             ],
             1
           )
+        ])
+      : _c("div", { staticClass: "grayBackground productHeader py-5" }, [
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "div",
+                { staticClass: "col-lg-8 col-md-6 col-sm-12 pt-2" },
+                [
+                  _c("h5", { staticClass: "pb-3" }, [
+                    _vm._v(_vm._s(_vm._f("firstLetterUpper")(_vm.gender)))
+                  ]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "pb-2" }, [_vm._v("Kategorier")]),
+                  _vm._v(" "),
+                  _vm._l(_vm.categories, function(category) {
+                    return _c(
+                      "ul",
+                      { key: category.id, attrs: { id: "hl" } },
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: _vm.gender + "/" + category.slug } },
+                          [_c("li", [_vm._v(_vm._s(category.name))])]
+                        )
+                      ],
+                      1
+                    )
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          ])
+        ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container" }, [
+      _vm.catId
+        ? _c("div", { staticClass: "row pb-3" }, [
+            _c("div", { staticClass: "col-lg-2 col-md-4 col-sm-6 col-xs-12" }, [
+              _c("div", { staticClass: "dropdown" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default shadow-none dropdown-toggle",
+                    attrs: {
+                      type: "button",
+                      id: "dropdownMenuButton filterButton",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [_vm._v("Filtrer på merker")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-menu",
+                    attrs: { "aria-labelledby": "dropdownMenuButton" }
+                  },
+                  _vm._l(_vm.brands, function(brand) {
+                    return _c(
+                      "ul",
+                      { key: brand.id, attrs: { id: "padding-none" } },
+                      [
+                        _c("li", { staticClass: "dropdown-item" }, [
+                          _c("div", { staticClass: "filter-checkbox" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.userSelectedBrands,
+                                  expression: "userSelectedBrands"
+                                }
+                              ],
+                              staticClass: "noCheckbox",
+                              attrs: { type: "checkbox", id: brand.slug },
+                              domProps: {
+                                value: brand.slug,
+                                checked: Array.isArray(_vm.userSelectedBrands)
+                                  ? _vm._i(_vm.userSelectedBrands, brand.slug) >
+                                    -1
+                                  : _vm.userSelectedBrands
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.userSelectedBrands,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = brand.slug,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.userSelectedBrands = $$a.concat([
+                                          $$v
+                                        ]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.userSelectedBrands = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.userSelectedBrands = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("label", { attrs: { for: brand.slug } }, [
+                              _vm._v(_vm._s(brand.name))
+                            ])
+                          ])
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-7 col-md-2 col-sm-0 col-xs-0" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-3 col-md-4 col-sm-6 col-xs-12" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.userSelectedSorting,
+                      expression: "userSelectedSorting"
+                    }
+                  ],
+                  staticClass: "form-control custom-select",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.userSelectedSorting = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", [_vm._v("Standard sortering")]),
+                  _vm._v(" "),
+                  _c("option", [_vm._v("Billigste først")]),
+                  _vm._v(" "),
+                  _c("option", [_vm._v("Dyreste først")])
+                ]
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row" },
+        _vm._l(_vm.userSelectedBrands, function(brand, index) {
+          return _c("ul", { key: index }, [
+            _c(
+              "a",
+              {
+                staticClass: "button2",
+                on: {
+                  click: function($event) {
+                    return _vm.removeUserselectedBrands(index)
+                  }
+                }
+              },
+              [
+                _c("li", [
+                  _vm._v(
+                    _vm._s(
+                      _vm._f("firstLetterUpper")(_vm._f("remove-")(brand))
+                    ) + " x"
+                  )
+                ])
+              ]
+            )
+          ])
         }),
         0
-      )
+      ),
+      _vm._v(" "),
+      _vm.isFetched == false
+        ? _c("div", { staticClass: "text-center" }, [_vm._m(1)])
+        : _c("div", { staticClass: "row pt-3" }, [
+            _c(
+              "div",
+              { staticClass: "row col-12", attrs: { id: "card-row" } },
+              _vm._l(_vm.products, function(product) {
+                return _c(
+                  "div",
+                  {
+                    key: product.id,
+                    staticClass:
+                      "card col-xl-3 col-lg-3 col-md-4 col-sm-6 col-xs-12"
+                  },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          to: "/produkt/" + product.slug,
+                          id: "card-click"
+                        }
+                      },
+                      [
+                        _c("img", {
+                          staticClass: "card-img-top",
+                          attrs: {
+                            src: "storage/" + product.image,
+                            alt: "...",
+                            width: "244",
+                            height: "295"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("p", { staticClass: "card-brand" }, [
+                            _vm._v("eswgfsdgfds")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-name" }, [
+                            _vm._v(_vm._s(product.name))
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-price" }, [
+                            _vm._v(_vm._s(product.price) + ",-")
+                          ])
+                        ])
+                      ]
+                    )
+                  ],
+                  1
+                )
+              }),
+              0
+            )
+          ])
     ])
   ])
 }
@@ -38174,66 +38308,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h2", [
-      _c("i", { staticClass: "fas fa-sliders-h" }),
-      _vm._v("\n          Filter\n        ")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c(
-      "a",
-      {
-        staticClass: "btn-white",
-        attrs: {
-          "data-toggle": "collapse",
-          href: "#collapseCategory",
-          role: "button",
-          "aria-expanded": "false",
-          "aria-controls": "collapseCategory"
-        }
-      },
-      [_c("h2", [_vm._v("Kategori")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "btn-white",
-        attrs: {
-          "data-toggle": "collapse",
-          href: "#collapseBrands",
-          role: "button",
-          "aria-expanded": "false",
-          "aria-controls": "collapseBrands"
-        }
-      },
-      [_c("h2", [_vm._v("Merke")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "btn-white",
-        attrs: {
-          "data-toggle": "collapse",
-          href: "#collapsePrice",
-          role: "button",
-          "aria-expanded": "false",
-          "aria-controls": "collapsePrice"
-        }
-      },
-      [_c("h2", [_vm._v("Pris")])]
+      "div",
+      { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2 justify-content-right" },
+      [
+        _c("img", {
+          attrs: {
+            id: "banner-picture",
+            src: "img/grivibilde2.png",
+            alt: "image"
+          }
+        })
+      ]
     )
   },
   function() {
@@ -38242,8 +38328,8 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "collapse", attrs: { id: "collapsePrice" } },
-      [_c("ul", [_c("li", [_vm._v("ei litta pris")])])]
+      { staticClass: "spinner-border", attrs: { role: "status" } },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
     )
   }
 ]
@@ -53471,7 +53557,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+ // Tar vekk denne "-"
 
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('remove-', function (value) {
+  return value.split("-").pop();
+});
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('firstLetterUpper', function (value) {
+  return value.charAt(0).toUpperCase() + value.substring(1);
+});
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
