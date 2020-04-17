@@ -1,5 +1,14 @@
 <template>
   <div>
+    <!-- Breadcrum navigering-->
+    <nav aria-label="breadcrumb" v-if="isFetched">
+      <ol class="breadcrumb grayBackground left-padding">
+        <router-link :to="prevRoute.path">
+          <li class="breadcrumb-item " aria-current="page" style="text-decoration=underline"><u>Tilbake</u></li>
+        </router-link>
+      </ol>
+    </nav>
+
 
     <div class="text-center" v-if="isFetched == false">
       <div class="spinner-border" role="status">
@@ -54,12 +63,21 @@ export default {
     return {
       id: this.$route.params.id,
       product: {},
-      isFetched: false
+      isFetched: false,
+      prevRoute: null,
+
     };
   },
   created() {
     this.getProduct();
   },
+  
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.prevRoute = from;
+    })
+  },
+
   // Henter produktet
   methods: {
     getProduct() {
