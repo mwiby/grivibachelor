@@ -23,7 +23,9 @@
           <div class="col-lg-8 col-md-6 col-sm-12 pt-2">
             <h5 class="pb-3">{{gender | firstLetterUpper}}</h5>
 
-            <h4 class="pb-2">Kategorier</h4>
+            <h4 v-if="products.length == 0 && isFetched == true">Ingen produkter har blitt lagt inn enda</h4>
+
+            <h4 v-else class="pb-2">Velg en Kategori</h4>
 
             <ul id="hl" v-for="category in categories" v-bind:key="category.id">
               <router-link v-bind:to="gender + '/' + category.slug">
@@ -56,7 +58,7 @@
               aria-expanded="false"
             >Filtrer på merker</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <ul id="padding-none" v-for="brand in brands" v-bind:key="brand.id">
+              <ul id="padding-none" class="dropdown-width" v-for="brand in brands" v-bind:key="brand.id">
                 <li class="dropdown-item">
                   <div class="filter-checkbox">
                     <input
@@ -66,7 +68,7 @@
                       v-bind:id="brand.slug"
                       v-model="userSelectedBrands"
                     />
-                    <label v-bind:for="brand.slug">{{brand.name}}</label>
+                    <label class="dropdown-width" v-bind:for="brand.slug">{{brand.name}}</label>
                   </div>
                 </li>
               </ul>
@@ -91,7 +93,7 @@
       <div class="row">
         <div class=" ml-3" v-for="(brand, index) in userSelectedBrands" v-bind:key="index">
           <a class="button2" v-on:click="removeUserselectedBrands(index)">
-           <div> {{brand | remove- | firstLetterUpper}} x </div> 
+           <div> {{brand | remove- | firstLetterUpper}} x</div> 
           </a>
         </div>
       </div>
@@ -152,6 +154,7 @@ export default {
       // Ting som kan bli filtrert på
       categories: [],
       brands: [],
+      allBrands: [],
 
       // Brukervalgte ting
       userSelectedBrands: [],

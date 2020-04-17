@@ -1975,29 +1975,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      brands: []
+      brands: [],
+      // Sjekker om button er trykket
+      toggle: true
     };
   },
   created: function created() {
-    this.getBrands();
+    this.getHalfBrands();
   },
   methods: {
-    // Får alle merker
-    getBrands: function getBrands() {
+    // Får halvparten av merkene
+    getHalfBrands: function getHalfBrands() {
       var _this = this;
 
       axios({
         method: 'GET',
         url: 'clothes/brands'
       }).then(function (result) {
-        _this.brands = result.data.brands;
+        var array;
+        array = result.data.brands;
+
+        if (array.length >= 8) {
+          _this.brands = array.splice(0, Math.ceil(array.length / 2));
+        } else {
+          _this.brands = array.splice(0, 4);
+        }
       });
+    },
+    // Får alle merkene
+    getBrands: function getBrands() {
+      var _this2 = this;
+
+      axios({
+        method: 'GET',
+        url: 'clothes/brands'
+      }).then(function (result) {
+        _this2.brands = result.data.brands;
+      });
+      this.toggle = false;
     }
   }
 });
@@ -2013,10 +2031,19 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var _methods;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2146,16 +2173,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      // Lagring av alle produktene på ett sted
+      allProducts: [],
       // Produkter som vises
       products: [],
-      // Produkter som blir hentet utifra brands
-      brandProducts: [],
       // Pather som blir lagret for api call og routes
       apiPathname: "",
       gender: "",
       // Ting som kan bli filtrert på
       categories: [],
       brands: [],
+      allBrands: [],
       // Brukervalgte ting
       userSelectedBrands: [],
       userSelectedSorting: "Standard sortering",
@@ -2178,25 +2206,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.userSelectedBrands.length == 0) {
         this.getProducts();
       } else {
-        // this.getProductsBrand();
-        //console.log(this.products[0].brand.slug);
-        //console.log(this.userSelectedBrands[0]);
-        for (var i = 0; i <= this.userSelectedBrands.length; i++) {
-          if (this.products[0].brand.slug == this.userSelectedBrands[i]) {
-            console.log("hei");
-          } else {
-            console.log("no");
-          }
-        }
+        this.getProductsBrand();
       }
-    },
-    brandProducts: function brandProducts() {
-      this.products = this.brandProducts;
     },
 
     /* Watcher om bruker har sortert */
     userSelectedSorting: function userSelectedSorting() {
-      if (this.userSelectedSorting == "Billigste først") {
+      if (this.userSelectedSorting == "Standard sortering") {
+        this.products.sort(function (a, b) {
+          return a.id > b.id ? 1 : -1;
+        });
+      } else if (this.userSelectedSorting == "Billigste først") {
         this.products.sort(function (a, b) {
           return a.price > b.price ? 1 : -1;
         });
@@ -2214,7 +2234,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  methods: (_methods = {
+  methods: {
     getPathname: function getPathname() {
       // Sjekker om det er dame eller herre
       var pathname = window.location.href;
@@ -2239,10 +2259,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getNewProducts: function getNewProducts() {
       var _this = this;
 
-      axios({
-        method: "GET",
-        url: "clothes/" + this.apiPathname
-      }).then(function (result) {
+      axios.get("clothes/" + this.apiPathname).then(function (result) {
         _this.products = result.data.products;
         _this.categories = result.data.categories;
         _this.isFetched = true;
@@ -2252,49 +2269,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getProductsCategory: function getProductsCategory() {
       var _this2 = this;
 
-      axios({
-        method: "GET",
-        url: "clothes/" + this.apiPathname + "/category/" + this.catId
-      }).then(function (result) {
+      axios.get("clothes/" + this.apiPathname + "/category/" + this.catId).then(function (result) {
         _this2.products = result.data.products;
+        _this2.allProducts = result.data.products;
         _this2.isFetched = true;
       });
     },
-    // Får alle merker
+    // Returnerer bare brands som eksisterer i oppgitt kategori
     getBrands: function getBrands() {
       var _this3 = this;
 
-      axios({
-        method: "GET",
-        url: "clothes/brands"
-      }).then(function (result) {
+      axios.get("/clothes/" + this.apiPathname + "/category/" + this.catId + "/brands").then(function (result) {
         _this3.brands = result.data.brands;
       });
+    },
+    // Får alle merker som er selektert
+    getProductsBrand: function getProductsBrand() {
+      var _this4 = this;
+
+      this.products = this.allProducts;
+      var sortedProducts = [];
+      this.products.forEach(function (e1) {
+        return _this4.userSelectedBrands.forEach(function (e2) {
+          if (e1.brand.slug == e2) {
+            sortedProducts.push(e1);
+          }
+        });
+      });
+      this.products = sortedProducts;
+    },
+    removeUserselectedBrands: function removeUserselectedBrands(index) {
+      this.userSelectedBrands.splice(index, 1);
     }
-  }, _defineProperty(_methods, "getBrands", function getBrands() {
-    var _this4 = this;
-
-    axios({
-      method: "GET",
-      url: "/clothes/" + this.apiPathname + "/category/" + this.catId + "/brands"
-    }).then(function (result) {
-      _this4.brands = result.data.brands;
-    });
-  }), _defineProperty(_methods, "getProductsBrand", function getProductsBrand() {
-    var sortedProducts = [];
-
-    for (var i = 0; i <= this.userSelectedBrands.length; i++) {
-      for (var j = 0; j <= this.products.length; j++) {
-        if (this.products[j].brand.slug == this.userSelectedBrands[i]) {
-          sortedProducts.push(this.products[j]);
-        }
-      }
-    }
-
-    this.products = sortedProducts;
-  }), _defineProperty(_methods, "removeUserselectedBrands", function removeUserselectedBrands(index) {
-    this.userSelectedBrands.splice(index, 1);
-  }), _methods) // End of methods
+  } // End of methods
 
 });
 
@@ -2359,17 +2366,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       id: this.$route.params.id,
       product: {},
-      isFetched: false
+      isFetched: false,
+      prevRoute: null
     };
   },
   created: function created() {
     this.getProduct();
-    console.log(this.id);
+  },
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      vm.prevRoute = from;
+    });
   },
   // Henter produktet
   methods: {
@@ -37759,9 +37780,57 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("Om oss")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("h1", { staticClass: "text-center" }, [_vm._v("Om oss")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container pb-4" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-lg-6 col-md-6 col-sm-12" }, [
+              _c("p", { staticClass: "section-description" }, [
+                _vm._v(
+                  "\n            Grivi Klær er en av Bø's eldste klesbutikker, etablert av Jorunn og Gjermund Grivi\n            på begynnelsen av 50-tallet.\n          "
+                )
+              ]),
+              _vm._v(" "),
+              _c("img", {
+                staticClass: "pb-3",
+                attrs: {
+                  src: "img/grivibutikk.png",
+                  alt: "old picture of grivi",
+                  height: "341.52px"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-6 col-md-6 col-sm-12" }, [
+              _c("p", { staticClass: "section-description" }, [
+                _vm._v(
+                  "\n            Vi har alltid jobbed med kjente merkevarer og gode kvaliteter, og vi forhandler både\n            dame og herre klær i klassisk design.\n          "
+                )
+              ]),
+              _vm._v(" "),
+              _c("img", {
+                attrs: {
+                  src: "img/grivibutikk2.png",
+                  alt: "picture of grivi window",
+                  height: "341.52px"
+                }
+              })
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -37783,9 +37852,71 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("Kontaktoss")])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-lg-6 col-md-4 col-sm-12" }, [
+          _c("h1", { staticClass: "contact-header" }, [_vm._v("Kontakt oss")]),
+          _vm._v(" "),
+          _c("h5", [
+            _c("i", { staticClass: "fas fa-store" }),
+            _vm._v(" Åpningstider\n      ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "pl-4" }, [
+            _vm._v("Man-Tors: 10:00-16:50 | Fre: 10-18 | Lørdag: 10:00-15:00")
+          ]),
+          _vm._v(" "),
+          _c("h5", [
+            _c("i", { staticClass: "fas fa-phone" }),
+            _vm._v(" Telefon\n      ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "pl-4" }, [_vm._v("90 62 41 76")]),
+          _vm._v(" "),
+          _c("h5", [
+            _c("i", { staticClass: "fas fa-envelope" }),
+            _vm._v(" E-post\n      ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "pl-4" }, [
+            _vm._v("anund.grivi@nenett.no | anund@grivi.no")
+          ]),
+          _vm._v(" "),
+          _c("h5", [
+            _c("i", { staticClass: "fas fa-map-marker-alt" }),
+            _vm._v(" Her holder vi til\n      ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "pl-4" }, [
+            _vm._v("\n        Bøgata 75\n        3800 Bø i Telemark\n      ")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-6 col-md-8 col-sm-12 mb-5" }, [
+          _c("iframe", {
+            staticClass: "map-size",
+            staticStyle: { border: "0" },
+            attrs: {
+              src:
+                "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2030.2010971324853!2d9.065451716075701!3d59.41304038168825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46474947b8690247%3A0xe7e93f1d68810069!2sB%C3%B8gata%2075%2C%203800%20B%C3%B8%20i%20Telemark!5e0!3m2!1sen!2sno!4v1585822052513!5m2!1sen!2sno",
+              frameborder: "0",
+              allowfullscreen: "",
+              "aria-hidden": "false",
+              tabindex: "0"
+            }
+          })
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -37807,15 +37938,59 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("body", [
-    _vm._m(0),
+  return _c("div", [
+    _c("header", [
+      _c("div", { staticClass: "sass-container row" }, [
+        _c(
+          "div",
+          { staticClass: "col-lg-12 col-md-12 text-center px-2 py-2" },
+          [
+            _c("h1", [_vm._v("Sjekk vårt utvalg")]),
+            _vm._v(" "),
+            _c("p", [
+              _vm._v(
+                "Velkommen til våre nettsider! Her kan du finne herre og dame klær i tilgjengelig hos oss i Bøgata"
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c(
+                "div",
+                { staticClass: "py-3" },
+                [
+                  _c("router-link", { attrs: { to: "/herre" } }, [
+                    _c("a", { staticClass: "button", attrs: { href: "#" } }, [
+                      _vm._v("Herre")
+                    ])
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "py-3" },
+                [
+                  _c("router-link", { attrs: { to: "/dame" } }, [
+                    _c("a", { staticClass: "button", attrs: { href: "#" } }, [
+                      _vm._v("Dame")
+                    ])
+                  ])
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "container py-3" }, [
       _c("h1", { staticClass: "text-center" }, [_vm._v("Våre merkervarer")]),
       _vm._v(" "),
       _c("p", { staticClass: "section-description" }, [
         _vm._v(
-          "Lorem ipsum dolor sit, amet consectetur adipisicing elit. \n            At obcaecati natus eius ex. Nostrum debitis a tempore laboriosam optio tenetur animi dolore sequi \n            officiis, voluptas facere! Debitis nam porro impedit?"
+          "\n                Vi er stolte over å presentere de ulike merkekvarene i vår butikk. Hos oss finner du merker som:\n                One & other, Ella & il, Ane Mone, Tif Tiffy, Munthe, American Vintage, Line of Oslo,\n                Fleischer Couture, NN07, Levis, Diesel, Replay, Lloyd, Bjørn Borg, Lyle & Scott og Frislid\n            "
         )
       ]),
       _vm._v(" "),
@@ -37840,24 +38015,35 @@ var render = function() {
                       height: "140"
                     }
                   })
-                ]),
-                _vm._v(" "),
-                _c("a", { attrs: { href: "#" } }, [
-                  _c("div", { staticClass: "product-name" }, [
-                    _vm._v(_vm._s(brand.name))
-                  ])
                 ])
               ]
             )
           }),
           _vm._v(" "),
-          _vm._m(1)
+          _c("div", { staticClass: "col-12 text-center my-5" }, [
+            _vm.toggle
+              ? _c("div", [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "button",
+                      on: {
+                        click: function($event) {
+                          return _vm.getBrands()
+                        }
+                      }
+                    },
+                    [_vm._v("Vis flere merker")]
+                  )
+                ])
+              : _vm._e()
+          ])
         ],
         2
       )
     ]),
     _vm._v(" "),
-    _vm._m(2)
+    _vm._m(0)
   ])
 }
 var staticRenderFns = [
@@ -37865,117 +38051,82 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("header", [
-      _c("div", { staticClass: "sass-container row" }, [
-        _c("div", { staticClass: "col-lg-6 col-md-12 text-center px-2 py-2" }, [
-          _c("h1", [_vm._v("Sjekk vårt utvalg")]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              "Her kan du finne herre og dame klær i tilgjengelig hos oss i Bøgata"
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "py-3" }, [
-              _c("a", { staticClass: "button", attrs: { href: "#" } }, [
-                _vm._v("Herre ")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "py-3" }, [
-              _c("a", { staticClass: "button", attrs: { href: "#" } }, [
-                _vm._v("Dame")
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-lg-6 col-md-12 px-2 py-2" }, [
-          _c("img", {
-            attrs: { src: "img/utvalg.jpg", width: "100%", height: "100%" }
-          })
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 text-center my-5" }, [
-      _c("a", { staticClass: "button", attrs: { href: "#" } }, [
-        _vm._v("Vis flere merker")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "grayBackground pb-5 pt-3" }, [
-      _c("div", { staticClass: "container " }, [
-        _c("h1", { staticClass: "text-center" }, [
-          _vm._v("Følg oss på Instagram")
+      _c("div", [
+        _c("h3", { staticClass: "text-center" }, [_vm._v("Følg oss på")]),
+        _vm._v(" "),
+        _c("a", [
+          _c("img", {
+            staticClass: "instaLogo",
+            attrs: { src: "img/instalogo.svg.png", alt: "Instagram" }
+          })
         ]),
         _vm._v(" "),
-        _c("p", { staticClass: "section-description text-center my-5" }, [
-          _vm._v(
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et sed accusantium maxime dolore cum provident itaque ea, a architecto alias quod reiciendis ex ullam id, soluta deleniti eaque neque perferendis."
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", { attrs: { src: "img/insta1.png", alt: "blog image" } })
-            ]),
+        _c("div", { staticClass: "container-2" }, [
+          _c("div", { staticClass: "row pt-3 pb-4 mx-0" }, [
+            _c(
+              "div",
+              { staticClass: "col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0" },
+              [
+                _c(
+                  "a",
+                  { attrs: { href: "https://www.instagram.com/griviklaer/" } },
+                  [
+                    _c("img", {
+                      attrs: { src: "img/instagrivi.png", alt: "Instagram" }
+                    })
+                  ]
+                )
+              ]
+            ),
             _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("h2", { staticClass: "blog-title" }, [_vm._v("Sjekk denne")])
-            ]),
+            _c(
+              "div",
+              { staticClass: "col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0" },
+              [
+                _c(
+                  "a",
+                  { attrs: { href: "https://www.instagram.com/griviklaer/" } },
+                  [
+                    _c("img", {
+                      attrs: { src: "img/instagrivi2.png", alt: "Instagram" }
+                    })
+                  ]
+                )
+              ]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "blog-description" }, [
-              _vm._v(
-                "Sjekk denne herlige trenchen fra @arniesays 🤩🤩 God søndag❣️"
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", { attrs: { src: "img/insta2.png", alt: "blog image" } })
-            ]),
+            _c(
+              "div",
+              { staticClass: "col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0" },
+              [
+                _c(
+                  "a",
+                  { attrs: { href: "https://www.instagram.com/griviklaer/" } },
+                  [
+                    _c("img", {
+                      attrs: { src: "img/instagrivi3.png", alt: "Instagram" }
+                    })
+                  ]
+                )
+              ]
+            ),
             _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("h2", { staticClass: "blog-title" }, [
-                _vm._v("Fantastisk flotte")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "blog-description" }, [
-              _vm._v(
-                "Fantastisk flotte basicnyheter fra @ellaandil 🤩😍Velkommen❣️#godlørdag #handlelokalt #sentrumsbutikkene"
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2" }, [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("img", { attrs: { src: "img/insta3.png", alt: "blog image" } })
-            ]),
-            _vm._v(" "),
-            _c("a", { attrs: { href: "#" } }, [
-              _c("h2", { staticClass: "blog-title" }, [
-                _vm._v("Innkjøp AW2020")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "blog-description" }, [
-              _vm._v(
-                "Innkjøp AW2020👌😍Lekre farger og kvaliteter❣️@ellaandil @norwegianfashioncenter"
-              )
-            ])
+            _c(
+              "div",
+              { staticClass: "col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0" },
+              [
+                _c(
+                  "a",
+                  { attrs: { href: "https://www.instagram.com/griviklaer/" } },
+                  [
+                    _c("img", {
+                      attrs: { src: "img/instagrivi4.png", alt: "Instagram" }
+                    })
+                  ]
+                )
+              ]
+            )
           ])
         ])
       ])
@@ -38056,7 +38207,13 @@ var render = function() {
                     _vm._v(_vm._s(_vm._f("firstLetterUpper")(_vm.gender)))
                   ]),
                   _vm._v(" "),
-                  _c("h4", { staticClass: "pb-2" }, [_vm._v("Kategorier")]),
+                  _vm.products.length == 0 && _vm.isFetched == true
+                    ? _c("h4", [
+                        _vm._v("Ingen produkter har blitt lagt inn enda")
+                      ])
+                    : _c("h4", { staticClass: "pb-2" }, [
+                        _vm._v("Velg en Kategori")
+                      ]),
                   _vm._v(" "),
                   _vm._l(_vm.categories, function(category) {
                     return _c(
@@ -38076,7 +38233,30 @@ var render = function() {
                 2
               ),
               _vm._v(" "),
-              _vm._m(0)
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "col-lg-4 col-md-6 col-sm-12 py-2 justify-content-right"
+                },
+                [
+                  _vm.gender == "dame"
+                    ? _c("img", {
+                        attrs: {
+                          id: "banner-picture",
+                          src: "img/grivibilde2.png",
+                          alt: "image"
+                        }
+                      })
+                    : _c("img", {
+                        attrs: {
+                          id: "banner-picture",
+                          src: "img/grivibilde.png",
+                          alt: "image"
+                        }
+                      })
+                ]
+              )
             ])
           ])
         ]),
@@ -38084,96 +38264,111 @@ var render = function() {
     _c("div", { staticClass: "container" }, [
       _vm.catId
         ? _c("div", { staticClass: "row pb-3" }, [
-            _c("div", { staticClass: "col-lg-2 col-md-4 col-sm-6 col-xs-12" }, [
-              _c("div", { staticClass: "dropdown" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default shadow-none dropdown-toggle",
-                    attrs: {
-                      type: "button",
-                      id: "dropdownMenuButton filterButton",
-                      "data-toggle": "dropdown",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  },
-                  [_vm._v("Filtrer på merker")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-menu",
-                    attrs: { "aria-labelledby": "dropdownMenuButton" }
-                  },
-                  _vm._l(_vm.brands, function(brand) {
-                    return _c(
-                      "ul",
-                      { key: brand.id, attrs: { id: "padding-none" } },
-                      [
-                        _c("li", { staticClass: "dropdown-item" }, [
-                          _c("div", { staticClass: "filter-checkbox" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.userSelectedBrands,
-                                  expression: "userSelectedBrands"
-                                }
-                              ],
-                              staticClass: "noCheckbox",
-                              attrs: { type: "checkbox", id: brand.slug },
-                              domProps: {
-                                value: brand.slug,
-                                checked: Array.isArray(_vm.userSelectedBrands)
-                                  ? _vm._i(_vm.userSelectedBrands, brand.slug) >
-                                    -1
-                                  : _vm.userSelectedBrands
-                              },
-                              on: {
-                                change: function($event) {
-                                  var $$a = _vm.userSelectedBrands,
-                                    $$el = $event.target,
-                                    $$c = $$el.checked ? true : false
-                                  if (Array.isArray($$a)) {
-                                    var $$v = brand.slug,
-                                      $$i = _vm._i($$a, $$v)
-                                    if ($$el.checked) {
-                                      $$i < 0 &&
-                                        (_vm.userSelectedBrands = $$a.concat([
-                                          $$v
-                                        ]))
+            _c(
+              "div",
+              { staticClass: "col-lg-3 col-md-4 col-sm-5 col-xs-12 mb-1" },
+              [
+                _c("div", { staticClass: "dropdown" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default dropdown-toggle",
+                      attrs: {
+                        type: "button",
+                        id: "dropdownMenuButton filterButton",
+                        "data-toggle": "dropdown",
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                      }
+                    },
+                    [_vm._v("Filtrer på merker")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "dropdown-menu",
+                      attrs: { "aria-labelledby": "dropdownMenuButton" }
+                    },
+                    _vm._l(_vm.brands, function(brand) {
+                      return _c(
+                        "ul",
+                        {
+                          key: brand.id,
+                          staticClass: "dropdown-width",
+                          attrs: { id: "padding-none" }
+                        },
+                        [
+                          _c("li", { staticClass: "dropdown-item" }, [
+                            _c("div", { staticClass: "filter-checkbox" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.userSelectedBrands,
+                                    expression: "userSelectedBrands"
+                                  }
+                                ],
+                                staticClass: "noCheckbox",
+                                attrs: { type: "checkbox", id: brand.slug },
+                                domProps: {
+                                  value: brand.slug,
+                                  checked: Array.isArray(_vm.userSelectedBrands)
+                                    ? _vm._i(
+                                        _vm.userSelectedBrands,
+                                        brand.slug
+                                      ) > -1
+                                    : _vm.userSelectedBrands
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.userSelectedBrands,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = brand.slug,
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          (_vm.userSelectedBrands = $$a.concat([
+                                            $$v
+                                          ]))
+                                      } else {
+                                        $$i > -1 &&
+                                          (_vm.userSelectedBrands = $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1)))
+                                      }
                                     } else {
-                                      $$i > -1 &&
-                                        (_vm.userSelectedBrands = $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1)))
+                                      _vm.userSelectedBrands = $$c
                                     }
-                                  } else {
-                                    _vm.userSelectedBrands = $$c
                                   }
                                 }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("label", { attrs: { for: brand.slug } }, [
-                              _vm._v(_vm._s(brand.name))
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "dropdown-width",
+                                  attrs: { for: brand.slug }
+                                },
+                                [_vm._v(_vm._s(brand.name))]
+                              )
                             ])
                           ])
-                        ])
-                      ]
-                    )
-                  }),
-                  0
-                )
-              ])
-            ]),
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ])
+              ]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-7 col-md-2 col-sm-0 col-xs-0" }),
+            _c("div", { staticClass: "col-lg-6 col-md-4 col-sm-2 col-xs-0" }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-sm-6 col-xs-12" }, [
+            _c("div", { staticClass: "col-lg-3 col-md-4 col-sm-5 col-xs-12" }, [
               _c(
                 "select",
                 {
@@ -38185,7 +38380,6 @@ var render = function() {
                       expression: "userSelectedSorting"
                     }
                   ],
-                  staticClass: "form-control custom-select",
                   on: {
                     change: function($event) {
                       var $$selectedVal = Array.prototype.filter
@@ -38218,7 +38412,7 @@ var render = function() {
         "div",
         { staticClass: "row" },
         _vm._l(_vm.userSelectedBrands, function(brand, index) {
-          return _c("ul", { key: index }, [
+          return _c("div", { key: index, staticClass: " ml-3" }, [
             _c(
               "a",
               {
@@ -38230,11 +38424,13 @@ var render = function() {
                 }
               },
               [
-                _c("li", [
+                _c("div", [
                   _vm._v(
-                    _vm._s(
-                      _vm._f("firstLetterUpper")(_vm._f("remove-")(brand))
-                    ) + " x"
+                    " " +
+                      _vm._s(
+                        _vm._f("firstLetterUpper")(_vm._f("remove-")(brand))
+                      ) +
+                      " x"
                   )
                 ])
               ]
@@ -38245,7 +38441,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _vm.isFetched == false
-        ? _c("div", { staticClass: "text-center" }, [_vm._m(1)])
+        ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
         : _c("div", { staticClass: "row pt-3" }, [
             _c(
               "div",
@@ -38279,9 +38475,11 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
-                          _c("p", { staticClass: "card-brand" }, [
-                            _vm._v("eswgfsdgfds")
-                          ]),
+                          _vm.catId
+                            ? _c("p", { staticClass: "card-brand" }, [
+                                _vm._v(_vm._s(product.brand.name))
+                              ])
+                            : _vm._e(),
                           _vm._v(" "),
                           _c("p", { staticClass: "card-name" }, [
                             _vm._v(_vm._s(product.name))
@@ -38304,24 +38502,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "col-lg-4 col-md-6 col-sm-12 py-2 justify-content-right" },
-      [
-        _c("img", {
-          attrs: {
-            id: "banner-picture",
-            src: "img/grivibilde2.png",
-            alt: "image"
-          }
-        })
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -38355,6 +38535,29 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm.isFetched
+      ? _c("nav", { attrs: { "aria-label": "breadcrumb" } }, [
+          _c(
+            "ol",
+            { staticClass: "breadcrumb grayBackground left-padding" },
+            [
+              _c("router-link", { attrs: { to: _vm.prevRoute.path } }, [
+                _c(
+                  "li",
+                  {
+                    staticClass: "breadcrumb-item ",
+                    staticStyle: {},
+                    attrs: { "aria-current": "page" }
+                  },
+                  [_c("u", [_vm._v("Tilbake")])]
+                )
+              ])
+            ],
+            1
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _vm.isFetched == false
       ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
       : _c("div", { staticClass: "container mb-5" }, [
@@ -38379,7 +38582,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-lg-8 col-md-6 col-sm-6 col-xs-12" }, [
               _c("p", { staticClass: "sp-brand" }, [
-                _vm._v("Brand-placeholder")
+                _vm._v(_vm._s(_vm.product.brand.name))
               ]),
               _vm._v(" "),
               _c("p", { staticClass: "sp-name" }, [

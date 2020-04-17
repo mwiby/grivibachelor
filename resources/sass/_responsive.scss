@@ -1,8 +1,23 @@
-@media only screen and (max-width: 1200px) {
+@media only screen and (min-width: 993px) {
+  .map-size{
+    width: 450px;
+    height: 400px;
+  }
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width: 992px) {
+  .map-size{
+    width: 350px;
+    height: 350px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .map-size{
+    width: 450px;
+    height: 400px;
+  }
 }
 
 /* Small Devices, Tablets */
@@ -24,6 +39,16 @@
   #banner-picture {
     display: none;
   }
+  .map-size{
+    width: 300px;
+    height: 300px;
+  }
+  
+  /* Om oss bilde */
+  .about-us-pic {
+    height: 150px;
+  }
+
 }
 
 /* Custom, iPhone Retina */
@@ -31,13 +56,14 @@
   .sp-description{
     padding-right: none;
   }
-  
+
   #banner-picture {
     display: none;
   }
+  
 }
 
-/* centers the logo in the nav on smaller screens*/
+/* centers the logo in the nav on smaller screens */
 @media (max-width: 620px) {
   .set-mid {
     margin-right: auto;

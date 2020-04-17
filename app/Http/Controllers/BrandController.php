@@ -36,7 +36,8 @@ public function show($gender,$c_slug){
             })->where('gender',($gender == 'woman'? 0 : 1));
         })
         ->get();
-        
+             
+            
         return ['brands' => $brands];
     }
 
