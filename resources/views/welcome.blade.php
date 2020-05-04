@@ -21,7 +21,8 @@
             <nav class="navbar navbar-expand-sm sass-container">
                 <div class="">
             <a class="navbar-brand" href="/">
-            <img src="storage/settings/May2020/grivilogo.png" alt="Grivi Klær" width="90" height="90" class="nav-logo">
+              <!-- Logo -->
+            <img src="storage/settings/May2020/grivilogo.png" alt="Grivi Klær" width="90" height="90" class="nav-logo"> 
             </a>
           </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

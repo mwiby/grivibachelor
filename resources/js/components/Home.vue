@@ -40,6 +40,7 @@
                 </div> <!-- end products -->
             </div>  <!-- end container -->
 
+        <!-- Instagram section -->
         <div class="grayBackground pb-5 pt-3">
             <div>
                 <h3 class="text-center">Følg oss på</h3>
