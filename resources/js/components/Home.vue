@@ -50,13 +50,13 @@
                         <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi1.PNG" alt="Instagram"></a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi2.PNG" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi2.png" alt="Instagram"></a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi3.PNG" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi3.png" alt="Instagram"></a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi4.PNG" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi4.png" alt="Instagram"></a>
                     </div>
                 </div>
                 </div>
