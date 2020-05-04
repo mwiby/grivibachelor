@@ -88,11 +88,21 @@ export default {
                 var array;
 
                 array = result.data.brands;
-                if (array.length >= 8) {
-                    this.brands = array.splice(0, Math.ceil(array.length / 2));
+                if (array.length <= 4) {
+                    this.toggle = false;
                 }
+
+                if (array == 'Ingen brands tilgjengelig') {
+                    this.toggle = false;
+                }
+
                 else {
-                    this.brands = array.splice(0, 4);
+                    if (array.length >= 8) {
+                        this.brands = array.splice(0, Math.ceil(array.length / 2));
+                    }
+                    else {
+                        this.brands = array.splice(0, 4);
+                    }
                 }
             });
         },
