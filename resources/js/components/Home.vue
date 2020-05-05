@@ -4,7 +4,7 @@
             <div class="sass-container row">
                 <div class="col-lg-12 col-md-12 text-center px-2 py-2">
                     <h1>Sjekk vårt utvalg</h1>
-                    <p>Velkommen til våre nettsider! Her kan du finne herre og dame klær i tilgjengelig hos oss i Bøgata</p>
+                    <p>Velkommen til våre nettsider! Her kan du finne herre og dame klær tilgjengelig hos oss i Bøgata</p>
 
                     <div class="row justify-content-center">
                         <div class="py-3">
@@ -21,10 +21,8 @@
             <div class="container py-3">
                 <h1 class="text-center">Våre merkervarer</h1>
 
-                <p class="section-description">
-                    Vi er stolte over å presentere de ulike merkekvarene i vår butikk. Hos oss finner du merker som:
-                    One & other, Ella & il, Ane Mone, Tif Tiffy, Munthe, American Vintage, Line of Oslo,
-                    Fleischer Couture, NN07, Levis, Diesel, Replay, Lloyd, Bjørn Borg, Lyle & Scott og Frislid
+                <p class="section-description text-center">
+                    Vi er stolte over å presentere de ulike merkekvarene i vår butikk. Hos oss finner du disse merkevarene:
                 </p>
             
                 
