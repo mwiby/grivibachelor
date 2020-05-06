@@ -29,16 +29,16 @@
             </button>
               <ul class="navbar-nav justify-content-end collapse navbar-collapse" id="navbarSupportedContent">
                 <li class="nav-item">
-                  <a class="nav-link nav-button"><router-link to="/herre">Herre</router-link></a>
+                  <a class="nav-link nav-button mobile-text"><router-link to="/herre">Herre</router-link></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link nav-button"><router-link to="/dame">Dame</router-link></a>
+                  <a class="nav-link nav-button mobile-text"><router-link to="/dame">Dame</router-link></a>
                 </li> 
                 <li class="nav-item">
-                  <a class="nav-link nav-button"><router-link to="/omoss">Om oss</router-link></a>
+                  <a class="nav-link nav-button mobile-text"><router-link to="/omoss">Om oss</router-link></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link nav-button"><router-link to="/kontakt">Kontakt</router-link></a>
+                  <a class="nav-link nav-button mobile-text"><router-link to="/kontakt">Kontakt</router-link></a>
                 </li>
               </ul>
           </nav>
