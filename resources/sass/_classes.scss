@@ -191,12 +191,17 @@ h1 {
   }
 }
 
-#hl {
+#category-type {
   display: inline-block;
   
   li {
     font-size: 20px;
-    font-weight: bold;
+    text-decoration: underline;
+    font-style: italic;
+  }
+  li:hover{
+    color: #c2c2c2;
+    border-color:#c2c2c2;
   }
 }
 #banner-picture {
@@ -306,8 +311,6 @@ a.btn-white {
 }
 /* end of bootstrap css overwrite */
 
-
-
 /* Styling for selected brands buttons */
 a.button2{
   display: inline-block;
@@ -316,21 +319,24 @@ a.button2{
   border: 1px solid black;
   margin:0 0.3em 0.3em 0;
   box-sizing: border-box;
-  font-family:'Roboto',sans-serif;
   font-weight:100;
   color:black;
   text-align:center;
   transition: all 0.15s;
   cursor: pointer;
-  }
-  a.button2:hover{
+}
+
+a.button2:hover{
   color: gray;
   border-color:gray;
-  }
-  a.button2:active{
+}
+
+a.button2:active{
   color:gray;
   border-color:gray;
 }
+
+.roundedEdges {border-radius: 10px;}
 
 /* Style for select dropdown on product page*/
 select{

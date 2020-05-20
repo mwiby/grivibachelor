@@ -15,19 +15,19 @@
       </ol>
     </nav>
 
-    <!-- Gender section -->
+    <!-- Category picker section -->
 
     <div class="grayBackground productHeader py-5" v-else>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-6 col-sm-12 pt-2">
-            <h5 class="pb-3">{{gender | firstLetterUpper}}</h5>
+            <h3 class="pb-3">{{gender | firstLetterUpper}}</h3>
 
             <h4 v-if="products.length == 0 && isFetched == true">Ingen produkter har blitt lagt inn enda</h4>
 
-            <h4 v-else class="pb-2">Velg en Kategori</h4>
+            <h4 v-else class="pb-2">Velg en kategori under:</h4>
 
-            <ul id="hl" v-for="category in categories" v-bind:key="category.id">
+            <ul id="category-type" v-for="category in categories" v-bind:key="category.id">
               <router-link v-bind:to="gender + '/' + category.slug">
                 <li>{{category.name}}</li>
               </router-link>
