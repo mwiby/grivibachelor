@@ -1,22 +1,26 @@
 <template>
     <div>
-        <header>
-            <div class="sass-container row">
-                <div class="col-lg-12 col-md-12 text-center px-2 py-2">
-                    <h1>Sjekk vårt utvalg</h1>
-                    <p>Velkommen til våre nettsider! Her kan du finne herre og dame klær tilgjengelig hos oss i Bøgata</p>
+        
+        <div class="sass-container row mobile-content border-bottom">
+            <div class="col-lg-12 col-md-12 text-center px-2 py-2">
+                <h1>Sjekk vårt utvalg</h1>
+                <p>Velkommen til våre nettsider! Her kan du finne herre og dame klær tilgjengelig hos oss i Bøgata</p>
 
-                    <div class="row justify-content-center">
-                        <div class="py-3">
-                            <router-link to="/herre"><a href="#" class="button">Herre</a></router-link>
-                        </div>
-                        <div class="py-3">
-                            <router-link to="/dame"><a href="#" class="button">Dame</a></router-link>
-                        </div>
-                    </div>    
-                </div>
+                <div class="row justify-content-center">
+                    <div class="py-3">
+                        <router-link to="/herre"><a href="#" class="button">Herre</a></router-link>
+                    </div>
+                    <div class="py-3">
+                        <router-link to="/dame"><a href="#" class="button">Dame</a></router-link>
+                    </div>
+                </div>    
             </div>
-        </header>
+        </div>
+        <div>
+            
+        </div>
+        
+            <img class="desktop-content" style="opacity: 0.7" src="storage/settings/May2020/grivibanner.PNG">
 
             <div class="container py-3">
                 <h1 class="text-center">Våre merkervarer</h1>
@@ -27,7 +31,7 @@
             
                 
                 <div class="row text-center">
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" v-for="brand in brands" v-bind:key="brand.id">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-6" v-for="brand in brands" v-bind:key="brand.id">
                         <a href="" target="blank"><img :src="'storage/' + brand.image" alt="product" width="230" height="140"></a>
                     </div>
                     <div class="col-12 text-center my-5">

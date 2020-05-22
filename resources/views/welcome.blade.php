@@ -29,6 +29,9 @@
             </button>
               <ul class="navbar-nav justify-content-end collapse navbar-collapse" id="navbarSupportedContent">
                 <li class="nav-item">
+                  <a class="nav-link nav-button mobile-text"><router-link to="/">Hjem</router-link></a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link nav-button mobile-text"><router-link to="/herre">Herre</router-link></a>
                 </li>
                 <li class="nav-item">
