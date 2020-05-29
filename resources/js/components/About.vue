@@ -12,14 +12,14 @@
               Grivi Klær er en av Bø's eldste klesbutikker, etablert av Jorunn og Gjermund Grivi
               på begynnelsen av 50-tallet.
             </p>
-            <img src="storage/settings/May2020/grivibutikk.PNG" height="341.52px" />
+            <img src="storage/Grivibilder/omoss1.png" height="341.52px" />
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12">
             <p class="section-description">
               Vi har alltid jobbed med kjente merkevarer og gode kvaliteter, og vi forhandler både
               dame og herre klær i klassisk design.
             </p>
-            <img src="storage/settings/May2020/grivibutikk2.PNG" height="341.52px" />
+            <img src="storage/Grivibilder/omoss2.png" height="341.52px" />
           </div>
         </div>
       </div>

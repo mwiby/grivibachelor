@@ -35,8 +35,8 @@
           </div>
 
           <div class="col-lg-4 col-md-6 col-sm-12 py-2 justify-content-right">
-            <img v-if="gender == 'dame'" id="banner-picture" src="storage/settings/May2020/grivibilde2.png" alt="image" />
-            <img v-else id="banner-picture" src="storage/settings/May2020/grivibilde.png" alt="image" />
+            <img v-if="gender == 'dame'" id="banner-picture" src="storage/Grivibilder/dameavdeling.png" alt="image" />
+            <img v-else id="banner-picture" src="storage/Grivibilder/herreavdeling.png" alt="image" />
           </div>
         </div>
         <!-- end category -->

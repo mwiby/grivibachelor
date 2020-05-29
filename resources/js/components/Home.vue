@@ -20,7 +20,7 @@
             
         </div>
         
-            <img class="desktop-content" style="opacity: 0.7" src="storage/settings/May2020/grivibanner.PNG">
+            <img class="desktop-content" style="opacity: 0.7" src="storage/Grivibilder/forsidebilde.png">
 
             <div class="container py-3">
                 <h1 class="text-center">Våre merkervarer</h1>
@@ -45,20 +45,20 @@
         <div class="grayBackground pb-5 pt-3">
             <div>
                 <h3 class="text-center">Følg oss på</h3>
-                <a><img class="instaLogo" src="storage/settings/May2020/instagram.png" alt="Instagram"></a>
+                <a><img class="instaLogo" src="storage/Grivibilder/instagram.png" alt="Instagram"></a>
             <div class="container-2">
                 <div class="row pt-3 pb-4 mx-0">
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi1.PNG" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/Grivibilder/instagrivi1.png" alt="Instagram"></a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi2.png" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/Grivibilder/instagrivi2.png" alt="Instagram"></a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi3.png" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/Grivibilder/instagrivi3.png" alt="Instagram"></a>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 px-0 mx-0">
-                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/settings/May2020/instagrivi4.png" alt="Instagram"></a>
+                        <a href="https://www.instagram.com/griviklaer/"><img src="storage/Grivibilder/instagrivi4.png" alt="Instagram"></a>
                     </div>
                 </div>
                 </div>
